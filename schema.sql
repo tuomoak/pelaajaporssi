@@ -11,5 +11,14 @@ CREATE TABLE players (
     vaihtaja BIT  DEFAULT 0 NOT NULL,  
     kotiuttaja BIT  DEFAULT 0 NOT NULL,  
     kopittaja BIT  DEFAULT 0 NOT NULL 
-    );           
+    );
+
+
+
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY,
+    username TEXT UNIQUE,
+    password_hash TEXT
+);
+       
  
