@@ -10,13 +10,14 @@ Eli puuttuvia ominaisuuksia välipalautteen tavoitteista:
 - ei hakutoimintoa
 
 * Sovelluksen käynnistys edellyttää:
-database.db tiedoston luominen schema.sql tiedoston avulla
+database.db tiedoston luominen schema.sql-tiedoston avulla
 
 Linuxissa:
 $ sqlite3 database.db < schema.sql
 
 Windowsissa:
 sqlite3 database.db
+
 sqlite> .read schema.sql
 
 ----------------------------------------------------
