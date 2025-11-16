@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Pelaajapörssi</title>
+</head>
+
+<body>
+  <h1>Pelaajapörssi</h1>
+  <p>{{ message }}</p>
+  <ul>
+    {% for item in items %}
+    <li>{{ item }}</li>
+    {% endfor %}
+  </ul>
+
+<p><a href="/add_player">Haluatko lisätä pelaajan?</a></p>
+
+<p><a href="/players">Palvelussa olevat pelaajat</a></p>
+
+<p><b>Tuleva ominaisuus:</b></p>
+
+<p><a href="/teams">Palvelussa olevat joukkueet</a></p>
+
+</body>
+
+</html>

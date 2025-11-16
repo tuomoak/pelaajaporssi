@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Ilmoitetun pelaajan tiedot</title>
+</head>
+
+<body>
+
+  <p><a href="/">Takaisin etusivulle</a></p>
+
+  <p><a href="/players">Palvelussa olevat pelaajat</a></p>
+
+  <p><a href="/teams">Palvelussa olevat joukkueet</a></p>
+
+  <p><b>Pelaaja ilmoitettu</b> </p>
+
+  <p>Ilmoitit pelaajan: {{ name }}</p>
+  <p>
+    Mahdolliset ulkopeliroolit:
+    <ul>
+      {% for outfield_position in outfield_positions %}
+      <li>{{ outfield_position }}</li>
+      {% endfor %}
+    </ul>
+  </p>
+  <p>
+    Mahdolliset sisäpeliroolit:
+    <ul>
+      {% for infield_role in infield_roles %}
+      <li>{{ infield_role }}</li>
+      {% endfor %}
+    </ul>
+  </p>
+  <p>
+    Esittelyteksti: <br />
+    {{ profile }}
+  </p>
+
+</body>
+
+</html>

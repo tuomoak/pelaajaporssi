@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Pelaajapörssi: palvelussa olevat pelaajat</title>
+</head>
+
+<body>
+  <p>
+    Pelaajien määrä: {{ count }}
+  </p>
+  <hr />
+  {% for player in all_players %}
+  <p>
+     {{ player.name }}
+  </p>
+  <hr />
+  {% endfor %}
+    
+  <p>
+    <a href="/">Takaisin etusivulle</a>
+  </p>
+</body>
+
+</html>

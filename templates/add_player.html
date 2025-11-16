@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Pelaajan lisäys</title>
+</head>
+
+<body>
+
+  <p><a href="/">Takaisin etusivulle</a></p>
+
+  <p><a href="/players">Palvelussa olevat pelaajat</a></p>
+
+  <p><a href="/teams">Palvelussa olevat joukkueet</a></p>
+
+  <p><b>Tässä voit lisätä uuden pelaajan tiedot</b></p>
+
+  <form action="/result" method="post">
+    <p>Pelaajan etunimi: <br />
+      <textarea name="firstname" rows="1" cols="50"></textarea>
+    </p>
+    <p>Pelaajan sukunimi: <br />
+      <textarea name="surname" rows="1" cols="50"></textarea>
+    </p>
+    <p>Mahdolliset ulkopeliroolit:</p>
+    <p>
+      <input type="checkbox" name="outfield_position" value="Lukkari" /> Lukkari
+      <input type="checkbox" name="outfield_position" value="Etukenttä" /> Etukenttä
+      <input type="checkbox" name="outfield_position" value="Polttolinja" /> Polttolinja
+      <input type="checkbox" name="outfield_position" value="Pesävahti" /> Pesävahti
+      <input type="checkbox" name="outfield_position" value="Takakenttä" /> Takakenttä
+    </p>
+      <p>Luontevimmat sisäpeliroolit:</p>
+    <p>
+      <input type="checkbox" name="infield_role" value="Etenijä" /> Etenijä
+      <input type="checkbox" name="infield_role" value="Vaihtaja" /> Vaihtaja
+      <input type="checkbox" name="infield_role" value="Kotiuttaja" /> Kotiuttaja
+      <input type="checkbox" name="infield_role" value="Kopittaja" /> Kopittaja
+    </p>
+    <p>Vapaaehtoinen teksti tai esittely:<br />
+      <textarea name="profile" rows="3" cols="50"></textarea>
+    </p>
+
+    <input type="submit" value="Lähetä" />
+  </form>
+
+</body>
+
+</html>
