@@ -1,14 +1,16 @@
 import sqlite3
 from flask import Flask
-from flask import redirect, render_template, request
-from werkzeug.security import generate_password_hash
+from flask import redirect, render_template, request, session
+from werkzeug.security import generate_password_hash, check_password_hash
 import db
+import config
 
 app = Flask(__name__)
+app.secret_key = config.secret_key
 
 @app.route("/")
 def index():
-    message = "Pelaajapörssi on pesäpalloaiheinen sivusto, joka on tarkoitettu seuraaville:"
+    message = "Pelaajapörssi on pesäpalloaiheinen sivusto, joka on tarkoitettu:"
     words = ["Joukkuetta etsiville", "Pelaajia etsiville"]
     return render_template("index.html", message=message, items=words)
 
@@ -84,3 +86,35 @@ def create():
         return "VIRHE: tunnus on jo varattu"
 
     return "Tunnus luotu"
+
+
+@app.route("/login", methods=["POST"])
+def login():
+
+    try:
+        username = request.form["username"]
+        password = request.form["password"]
+        
+
+        sql = "SELECT id, password_hash FROM users WHERE username = ?"
+        result = db.query(sql, [username])[0]
+        user_id = result["id"]
+        password_hash = result["password_hash"]
+        #password_hash = db.query(sql, [username])[0][0]
+
+    
+        if check_password_hash(password_hash, password):
+            session["username"] = username
+            session["user_id"] = user_id
+            return redirect("/")
+        else:
+            return "VIRHE: väärä tunnus tai salasana"
+    
+    except:
+            return "VIRHE: väärä tunnus tai salasana"
+
+@app.route("/logout")
+def logout():
+    del session["username"]
+    del session["user_id"]
+    return redirect("/")

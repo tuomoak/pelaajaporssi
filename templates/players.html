@@ -6,6 +6,12 @@
 </head>
 
 <body>
+    <p><a href="/">Takaisin etusivulle</a></p>
+
+<p><b>Kirjautuneet näkevät palvelussa olevat pelaajat</b>
+</p>
+
+{% if session.user_id %}
   <p>
     Pelaajien määrä: {{ count }}
   </p>
@@ -16,10 +22,8 @@
   </p>
   <hr />
   {% endfor %}
-    
-  <p>
-    <a href="/">Takaisin etusivulle</a>
-  </p>
-</body>
+
+{% endif %}
+ </body>
 
 </html>

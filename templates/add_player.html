@@ -5,15 +5,14 @@
   <title>Pelaajan lisäys</title>
 </head>
 
+
 <body>
 
   <p><a href="/">Takaisin etusivulle</a></p>
+ 
+  <p><b>Kirjautuneet käyttäjät voivat lisätä uuden pelaajan</b></p>
 
-  <p><a href="/players">Palvelussa olevat pelaajat</a></p>
-
-  <p><a href="/teams">Palvelussa olevat joukkueet</a></p>
-
-  <p><b>Tässä voit lisätä uuden pelaajan tiedot</b></p>
+  {% if session.user_id %}
 
   <form action="/result" method="post">
     <p>Pelaajan etunimi: <br />
@@ -43,7 +42,10 @@
 
     <input type="submit" value="Lähetä" />
   </form>
-
+  
+  {% endif %}
 </body>
+
+
 
 </html>

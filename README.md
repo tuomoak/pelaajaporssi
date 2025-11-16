@@ -1,5 +1,26 @@
 # pelaajaporssi
 
+16.11.2025: Ohje sovelluksen testaajalle:
+* Sovellus ei täytä tällä hetkellä välipalautuksen 2 tavoitelistan kaikkia ominaisuuksia
+* Sovelluksessa pystyy rekisteröimään tunnuksen ja kirjautumaan - toiminnot rajattu kirjautuneille käyttäjille
+* Sovelluksessa pystyy luoda pelaajia tietokantaan ja nähdä lisättyjen pelaajien nimet listassa (muokkaaminen tai poistaminen ei onnistu - myöskään hakutoimintoa ei ole)
+
+Eli puuttuvia ominaisuuksia välipalautteen tavoitteista:
+- ei pelaajan muokkaamista tai poistamista
+- ei hakutoimintoa
+
+* Sovelluksen käynnistys edellyttää:
+database.db tiedoston luominen schema.sql tiedoston avulla
+
+Linuxissa:
+$ sqlite3 database.db < schema.sql
+
+Windowsissa:
+sqlite3 database.db
+sqlite> .read schema.sql
+
+----------------------------------------------------
+Suunnitteltuja ominaisuuksia:
     Sovelluksen tarkoitus on auttaa siinä, että pelaajat löytäisivät itselleen joukkueen ja joukkueet löytäisivät itselleen täydennystä.    
     * Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen.
     * Käyttäjä pystyy lisäämään sovellukseen joko pelaajia tai joukkueita. Lisäksi käyttäjä pystyy muokkaamaan ja poistamaan lisäämänsä pelaajan tai joukkueen tietoja.
