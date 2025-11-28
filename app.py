@@ -25,27 +25,35 @@ def result():
     defence_positions = request.form.getlist("defence_position")
     batting_roles = request.form.getlist("batting_role")
     profile = request.form["profile"]
+    user_id = session["user_id"]
 
     name=firstname + str(" ") + surname
   
-    columns = "NAME, PROFILE"
-    column_places = "?,?"
+    columns = "NAME, PROFILE, user_id"
+    column_places = "?,?,?"
     
-    values = [name, profile]
+    values = [name, profile,user_id]
+
+    fi_defence_positions = []
+    fi_batting_roles = []
 
     for def_position in defence_positions:
-       columns += ", " + str(def_position)
+       eng_def_position, fin_def_position = def_position.split("|")
+       fi_defence_positions.append(fin_def_position)
+       columns += ", " + str(eng_def_position)
        column_places +=  ",?" 
        values.append(1)
       
     for batting_role in batting_roles:
-       columns += ", " + str(batting_role)
+       eng_batting_role, fi_batting_role = batting_role.split("|")
+       fi_batting_roles.append(fi_batting_role)
+       columns += ", " + str(eng_batting_role)
        column_places +=  ",?"
        values.append(1)
 
     db.execute(f"INSERT INTO players ({columns}) VALUES ({column_places})",values)
         
-    return render_template("result.html", name=firstname + str(" ") + surname, defence_positions=defence_positions, batting_roles=batting_roles, profile=profile)
+    return render_template("result.html", name=firstname + str(" ") + surname, defence_positions=fi_defence_positions, batting_roles=fi_batting_roles, profile=profile)
 
 @app.route("/teams")
 def teams():
@@ -104,9 +112,7 @@ def login():
         result = db.query(sql, [username])[0]
         user_id = result["id"]
         password_hash = result["password_hash"]
-        #password_hash = db.query(sql, [username])[0][0]
 
-    
         if check_password_hash(password_hash, password):
             session["username"] = username
             session["user_id"] = user_id

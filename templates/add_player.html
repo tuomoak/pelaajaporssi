@@ -10,7 +10,7 @@
 
   <p><a href="/">Takaisin etusivulle</a></p>
  
-  <p><b>Kirjautuneet käyttäjät voivat lisätä uuden pelaajan</b></p>
+  <p><b>Uuden pelaajan lisääminen</b></p>
 
   {% if session.user_id %}
 
@@ -23,19 +23,19 @@
     </p>
     <p>Mahdolliset ulkopeliroolit:</p>
     <p>
-      <input type="checkbox" name="defence_position" value="pitcher" /> Lukkari
-      <input type="checkbox" name="defence_position" value="frontfield" /> Etukenttä
-      <input type="checkbox" name="defence_position" value="midfield" /> Polttolinja
-      <input type="checkbox" name="defence_position" value="baseman" /> Pesävahti
-      <input type="checkbox" name="defence_position" value="outfielder" /> Takakenttä
+      <input type="checkbox" name="defence_position" value="pitcher|Lukkari" /> Lukkari
+      <input type="checkbox" name="defence_position" value="frontfield|Etukenttä" /> Etukenttä
+      <input type="checkbox" name="defence_position" value="midfield|Polttolinja" /> Polttolinja
+      <input type="checkbox" name="defence_position" value="baseman|Pesävahti" /> Pesävahti
+      <input type="checkbox" name="defence_position" value="outfielder|Takakenttä" /> Takakenttä
     </p>
       <p>Luontevimmat sisäpeliroolit:</p>
     <p>
-      <input type="checkbox" name="batting_role" value="runner" /> Etenijä
-      <input type="checkbox" name="batting_role" value="advancehitter" /> Vaihtaja
-      <input type="checkbox" name="batting_role" value="runhitter" /> Kotiuttaja
-      <input type="checkbox" name="batting_role" value="flyhitter" /> Kopittaja
-      <input type="checkbox" name="batting_role" value="joker" /> Jokeri
+      <input type="checkbox" name="batting_role" value="runner|Etenijä" /> Etenijä
+      <input type="checkbox" name="batting_role" value="advancehitter|Vaihtaja" /> Vaihtaja
+      <input type="checkbox" name="batting_role" value="runhitter|Kotiuttaja" /> Kotiuttaja
+      <input type="checkbox" name="batting_role" value="flyhitter|Kopittaja" /> Kopittaja
+      <input type="checkbox" name="batting_role" value="joker|Jokeri" /> Jokeri
     </p>
     <p>Vapaaehtoinen teksti tai esittely:<br />
       <textarea name="profile" rows="3" cols="50"></textarea>

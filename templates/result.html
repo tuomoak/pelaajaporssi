@@ -7,11 +7,7 @@
 
 <body>
 
-  <p><a href="/">Takaisin etusivulle</a></p>
-
-  <p><a href="/players">Palvelussa olevat pelaajat</a></p>
-
-  <p><a href="/teams">Palvelussa olevat joukkueet</a></p>
+  <p><a href="/">Takaisin etusivulle</a> <a href="/players">Palvelussa olevat pelaajat</a> <a href="/teams">Palvelussa olevat joukkueet</a></p>
 
   <p><b>Pelaaja ilmoitettu</b> </p>
 
@@ -19,16 +15,16 @@
   <p>
     Mahdolliset ulkopeliroolit:
     <ul>
-      {% for outfield_position in outfield_positions %}
-      <li>{{ outfield_position }}</li>
+      {% for defence_position in defence_positions %}
+      <li>{{ defence_position }}</li>
       {% endfor %}
     </ul>
   </p>
   <p>
     Mahdolliset sisäpeliroolit:
     <ul>
-      {% for infield_role in infield_roles %}
-      <li>{{ infield_role }}</li>
+      {% for batting_role in batting_roles %}
+      <li>{{ batting_role }}</li>
       {% endfor %}
     </ul>
   </p>

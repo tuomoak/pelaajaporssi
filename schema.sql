@@ -11,7 +11,8 @@ CREATE TABLE players (
     advancehitter BIT  DEFAULT 0 NOT NULL,  
     runhitter BIT  DEFAULT 0 NOT NULL,  
     flyhitter BIT  DEFAULT 0 NOT NULL,
-    joker BIT  DEFAULT 0 NOT NULL 
+    joker BIT  DEFAULT 0 NOT NULL,
+    user_id INTEGER References users 
     );
 
 
