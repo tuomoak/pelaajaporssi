@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import db
 import config 
 import secrets
+import players
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -53,7 +54,7 @@ def result():
        column_places +=  ",?"
        values.append(1)
 
-    db.execute(f"INSERT INTO players ({columns}) VALUES ({column_places})",values)
+    players.add_players(columns, column_places, values)
         
     return render_template("result.html", name=firstname + str(" ") + surname, defence_positions=fi_defence_positions, batting_roles=fi_batting_roles, profile=profile)
 
