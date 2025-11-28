@@ -1,6 +1,6 @@
 import sqlite3
 from flask import Flask
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, request, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 import db
 import config
@@ -76,17 +76,21 @@ def create():
     password1 = request.form["password1"]
     password2 = request.form["password2"]
     if password1 != password2:
-        return "VIRHE: salasanat eivät ole samat"
+        flash("VIRHE: salasanat eivät ole samat")
+        return redirect("/register") 
     password_hash = generate_password_hash(password1)
 
     try:
         sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
         db.execute(sql, [username, password_hash])
     except sqlite3.IntegrityError:
-        return "VIRHE: tunnus on jo varattu"
+        flash("VIRHE: tunnus on jo varattu")
+        return redirect("/register")
+            
+    flash(f'Tunnuksen luonti onnistui. Tunnuksesi on: {username}')
+    return redirect("/")
 
-    return "Tunnus luotu"
-
+redirect("/register")
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -108,10 +112,12 @@ def login():
             session["user_id"] = user_id
             return redirect("/")
         else:
-            return "VIRHE: väärä tunnus tai salasana"
+            flash("VIRHE: väärä tunnus tai salasana")
+            return redirect("/")
     
     except:
-            return "VIRHE: väärä tunnus tai salasana"
+            flash("VIRHE: väärä tunnus tai salasana")
+            return redirect("/")
 
 @app.route("/logout")
 def logout():
