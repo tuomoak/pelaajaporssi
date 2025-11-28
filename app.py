@@ -22,8 +22,8 @@ def add_player():
 def result():
     firstname = request.form["firstname"]
     surname = request.form["surname"]
-    outfield_positions = request.form.getlist("outfield_position")
-    infield_roles = request.form.getlist("infield_role")
+    defence_positions = request.form.getlist("defence_position")
+    batting_roles = request.form.getlist("batting_role")
     profile = request.form["profile"]
 
     name=firstname + str(" ") + surname
@@ -33,19 +33,19 @@ def result():
     
     values = [name, profile]
 
-    for of_position in outfield_positions:
-       columns += ", " + str(of_position)
+    for def_position in defence_positions:
+       columns += ", " + str(def_position)
        column_places +=  ",?" 
        values.append(1)
       
-    for infield_role in infield_roles:
-       columns += ", " + str(infield_role)
+    for batting_role in batting_roles:
+       columns += ", " + str(batting_role)
        column_places +=  ",?"
        values.append(1)
 
     db.execute(f"INSERT INTO players ({columns}) VALUES ({column_places})",values)
         
-    return render_template("result.html", name=firstname + str(" ") + surname, outfield_positions=outfield_positions, infield_roles=infield_roles, profile=profile)
+    return render_template("result.html", name=firstname + str(" ") + surname, defence_positions=defence_positions, batting_roles=batting_roles, profile=profile)
 
 @app.route("/teams")
 def teams():

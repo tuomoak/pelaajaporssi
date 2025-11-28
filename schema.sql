@@ -2,15 +2,16 @@ CREATE TABLE players (
     id INTEGER PRIMARY KEY,
     NAME TEXT,
     PROFILE TEXT,
-    lukkari BIT  DEFAULT 0 NOT NULL,
-    etukenttä BIT  DEFAULT 0 NOT NULL,
-    polttolinja BIT  DEFAULT 0 NOT NULL,
-    pesävahti BIT  DEFAULT 0 NOT NULL,   
-    takakenttä BIT  DEFAULT 0 NOT NULL,  
-    etenijä BIT  DEFAULT 0 NOT NULL,    
-    vaihtaja BIT  DEFAULT 0 NOT NULL,  
-    kotiuttaja BIT  DEFAULT 0 NOT NULL,  
-    kopittaja BIT  DEFAULT 0 NOT NULL 
+    pitcher BIT  DEFAULT 0 NOT NULL,
+    frontfield BIT  DEFAULT 0 NOT NULL,
+    midfield BIT  DEFAULT 0 NOT NULL,
+    baseman BIT  DEFAULT 0 NOT NULL,   
+    outfielder BIT  DEFAULT 0 NOT NULL,  
+    runner BIT  DEFAULT 0 NOT NULL,    
+    advancehitter BIT  DEFAULT 0 NOT NULL,  
+    runhitter BIT  DEFAULT 0 NOT NULL,  
+    flyhitter BIT  DEFAULT 0 NOT NULL,
+    joker BIT  DEFAULT 0 NOT NULL 
     );
 
 
