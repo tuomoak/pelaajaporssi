@@ -25,9 +25,10 @@
     </p>
     <input type="submit" value="Kirjaudu" />
   </form>
-  {% endif %}
 
   <p><a href="/register">Rekisteröi tunnus</a></p>
+  
+  {% endif %}
 
   <h1>Pelaajapörssi - Pesisjoukkuetta tai -pelaajaa vailla?</h1>
   <p>{{ message }}</p>
@@ -37,6 +38,8 @@
     {% endfor %}
   </ul>
 
+{% if session.username %}
+
 <p><a href="/add_player">Haluatko lisätä pelaajan?</a></p>
 
 <p><a href="/players">Palvelussa olevat pelaajat</a></p>
@@ -44,6 +47,9 @@
 <p><b>Tuleva ominaisuus:</b></p>
 
 <p><a href="/teams">Palvelussa olevat joukkueet</a></p>
+
+  {% else %}
+  {% endif %}
 
 </body>
 
