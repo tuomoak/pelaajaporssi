@@ -1,9 +1,10 @@
 import sqlite3
 from flask import Flask
-from flask import redirect, render_template, request, session, flash
+from flask import redirect, render_template, request, session, flash, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 import db
-import config
+import config 
+import secrets
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -20,6 +21,7 @@ def add_player():
 
 @app.route("/result", methods=["POST"])
 def result():
+    check_csrf()
     firstname = request.form["firstname"]
     surname = request.form["surname"]
     defence_positions = request.form.getlist("defence_position")
@@ -116,6 +118,7 @@ def login():
         if check_password_hash(password_hash, password):
             session["username"] = username
             session["user_id"] = user_id
+            session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
         else:
             flash("VIRHE: väärä tunnus tai salasana")
@@ -130,3 +133,8 @@ def logout():
     del session["username"]
     del session["user_id"]
     return redirect("/")
+
+
+def check_csrf():
+    if request.form["csrf_token"] != session["csrf_token"]:
+        abort(403)

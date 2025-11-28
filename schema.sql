@@ -12,7 +12,7 @@ CREATE TABLE players (
     runhitter BIT  DEFAULT 0 NOT NULL,  
     flyhitter BIT  DEFAULT 0 NOT NULL,
     joker BIT  DEFAULT 0 NOT NULL,
-    user_id INTEGER References users 
+    user_id INTEGER References users
     );
 
 
