@@ -1,16 +1,10 @@
 # pelaajaporssi
 
-16.11.2025: Ohje sovelluksen testaajalle:
-* Sovellus ei täytä tällä hetkellä välipalautuksen 2 tavoitelistan kaikkia ominaisuuksia
-* Sovelluksessa pystyy rekisteröimään tunnuksen ja kirjautumaan - toiminnot rajattu kirjautuneille käyttäjille
-* Sovelluksessa pystyy luoda pelaajia tietokantaan ja nähdä lisättyjen pelaajien nimet listassa (muokkaaminen tai poistaminen ei onnistu - myöskään hakutoimintoa ei ole)
+Ohje sovelluksen testaajalle:
 
-Eli puuttuvia ominaisuuksia välipalautteen tavoitteista:
-- ei pelaajan muokkaamista tai poistamista
-- ei hakutoimintoa
+Sovelluksen käynnistys edellyttää:
 
-* Sovelluksen käynnistys edellyttää:
-database.db tiedoston luominen schema.sql-tiedoston avulla
+database.db-tiedoston luominen schema.sql-tiedoston avulla
 
 Linuxissa:
 
