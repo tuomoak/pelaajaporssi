@@ -43,6 +43,23 @@ def edit_player(player_id):
 
     return render_template("/edit_player.html", player=player[0], def_list = def_list, bat_list=bat_list)
 
+@app.route("/remove_player/<int:player_id>", methods=["GET", "POST"])
+def remove_player(player_id):
+    
+    if request.method == "GET":
+        player = players.get_player(player_id)
+        return render_template("remove_player.html", player=player[0])
+
+    if request.method == "POST":
+        check_csrf()
+        if "remove" in request.form:
+            players.remove_player(player_id)
+            flash("Pelaajan tiedot poistettu")
+            return redirect("/")
+        else:
+            return redirect("/player/" + str(player_id))
+    
+
 @app.route("/update_player", methods=["POST"])
 def update_player():
     check_csrf()

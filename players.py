@@ -114,4 +114,20 @@ def update_player(player_id, name, defence_positions, batting_roles, profile):
         VALUES (?, ?, ?, 1);
         """
        db.execute(sql,[player_id, str(eng_batting_role), str(fi_batting_role)])
+
+def remove_player(player_id):
+
+
+    sql = "DELETE FROM player_bat_roles WHERE player_id = ?"
     
+    db.execute(sql, [player_id])
+
+    sql = "DELETE FROM player_def_roles WHERE player_id = ?"
+    
+    db.execute(sql, [player_id])
+
+    sql = "DELETE FROM players WHERE id = ?"
+    
+    db.execute(sql, [player_id])
+
+
