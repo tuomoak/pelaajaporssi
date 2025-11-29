@@ -42,8 +42,11 @@ def create_player():
 @app.route("/edit_player/<int:player_id>")
 def edit_player(player_id):
     player = players.get_player(player_id)
-    return render_template("/edit_player.html", player=player[0], def_roles=player[1], bat_roles=player[2])
 
+    def_list = {row[0] for row in player[1]}
+    bat_list = {row[0] for row in player[2]}
+
+    return render_template("/edit_player.html", player=player[0], def_list = def_list, bat_list=bat_list)
 
 @app.route("/update_player", methods=["POST"])
 def update_player():
@@ -54,12 +57,11 @@ def update_player():
     batting_roles = request.form.getlist("batting_role")
     profile = request.form["profile"]
     
-    try:
-        players.update_player(player_id, name, defence_positions, batting_roles, profile)
-        flash("Pelaajan muokatut tiedot")
+    players.update_player(player_id, name, defence_positions, batting_roles, profile)
+    flash("Pelaajan muokatut tiedot")
     
-    except:
-        flash("Pelaajan tietojen muokkaaminen ei onnistunut.")
+    #except:
+    #    flash("Pelaajan tietojen muokkaaminen ei onnistunut.")
 
     return redirect("/player/" + str(player_id))
 
