@@ -8,20 +8,24 @@
 <body>
     <p><a href="/">Takaisin etusivulle</a></p>
 
-<p><b>Kirjautuneet näkevät palvelussa olevat pelaajat</b>
+{% if session.user_id %}
+
+<p><b>Palvelussa olevat pelaajat</b>
 </p>
 
-{% if session.user_id %}
-  <p>
+<p>
     Pelaajien määrä: {{ count }}
   </p>
   <hr />
+  
+  <ul>
   {% for player in all_players %}
   <p>
-     {{ player.name }}
+  <li> <a href="/player/{{ player.id }}" >{{ player.name }}</a>  </li>
   </p>
   <hr />
   {% endfor %}
+  </ul>
 
 {% endif %}
  </body>

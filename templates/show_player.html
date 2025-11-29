@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title> {{player.name}}</title>
+</head>
+
+<body>
+    
+  <p><a href="/">Takaisin etusivulle</a> <a href="/players">Palvelussa olevat pelaajat</a> <a href="/teams">Palvelussa olevat joukkueet</a></p>
+
+<p>
+  <b>{{player.name}}</b>
+</p>
+
+
+<b> Mahdolliset ulkopeliroolit:</b>
+<ul>
+{% for row in def_roles%}
+   <li>{{row['role_name_fi']}}</li> 
+    
+{% endfor %}
+</ul>
+
+<b> Mahdolliset sisäpeliroolit:</b>
+<ul>
+{% for row in bat_roles%}
+   <li>{{row['role_name_fi']}}</li> 
+    
+{% endfor %}
+</ul>
+
+</body>
+
+</html>

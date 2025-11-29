@@ -30,32 +30,8 @@ def result():
     profile = request.form["profile"]
     user_id = session["user_id"]
 
-    name=firstname + str(" ") + surname
-  
-    columns = "NAME, PROFILE, user_id"
-    column_places = "?,?,?"
-    
-    values = [name, profile,user_id]
+    fi_defence_positions, fi_batting_roles = players.add_player(firstname, surname, defence_positions, batting_roles, profile, user_id)
 
-    fi_defence_positions = []
-    fi_batting_roles = []
-
-    for def_position in defence_positions:
-       eng_def_position, fin_def_position = def_position.split("|")
-       fi_defence_positions.append(fin_def_position)
-       columns += ", " + str(eng_def_position)
-       column_places +=  ",?" 
-       values.append(1)
-      
-    for batting_role in batting_roles:
-       eng_batting_role, fi_batting_role = batting_role.split("|")
-       fi_batting_roles.append(fi_batting_role)
-       columns += ", " + str(eng_batting_role)
-       column_places +=  ",?"
-       values.append(1)
-
-    players.add_players(columns, column_places, values)
-        
     return render_template("result.html", name=firstname + str(" ") + surname, defence_positions=fi_defence_positions, batting_roles=fi_batting_roles, profile=profile)
 
 @app.route("/teams")
@@ -63,14 +39,20 @@ def teams():
     return "Tähän tulee palvelussa olevat joukkueet."
 
 @app.route("/players")
-def players():
-    all_players = db.query("SELECT * FROM players")
+def show_players():
+
+    all_players = players.get_players()
+        
     count = len(all_players)
     return render_template("/players.html", count=count, all_players=all_players)
 
-@app.route("/player/<int:page_id>")
-def player(page_id):
-    return "Tämä pelaajan nro sivu: " + str(page_id)
+@app.route("/player/<int:player_id>")
+def player(player_id):
+
+    player = players.get_player(player_id)
+
+    return render_template("/show_player.html", player=player[0], def_roles=player[1], bat_roles=player[2])
+    
 
 @app.route("/team/<int:page_id>")
 def team(page_id):
@@ -110,7 +92,6 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         
-
         sql = "SELECT id, password_hash FROM users WHERE username = ?"
         result = db.query(sql, [username])[0]
         user_id = result["id"]

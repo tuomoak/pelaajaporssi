@@ -2,25 +2,34 @@ CREATE TABLE players (
     id INTEGER PRIMARY KEY,
     NAME TEXT,
     PROFILE TEXT,
-    pitcher BIT  DEFAULT 0 NOT NULL,
-    frontfield BIT  DEFAULT 0 NOT NULL,
-    midfield BIT  DEFAULT 0 NOT NULL,
-    baseman BIT  DEFAULT 0 NOT NULL,   
-    outfielder BIT  DEFAULT 0 NOT NULL,  
-    runner BIT  DEFAULT 0 NOT NULL,    
-    advancehitter BIT  DEFAULT 0 NOT NULL,  
-    runhitter BIT  DEFAULT 0 NOT NULL,  
-    flyhitter BIT  DEFAULT 0 NOT NULL,
-    joker BIT  DEFAULT 0 NOT NULL,
     user_id INTEGER References users
     );
 
 
+CREATE TABLE player_def_roles (
+    player_id INTEGER,
+    role_name_eng TEXT,
+    role_name_fi TEXT,
+    role_value DEFAULT 0 NOT NULL,
+    FOREIGN KEY (player_id) REFERENCES players(id)
+    );
+
+
+CREATE TABLE player_bat_roles (
+    player_id INTEGER,
+    role_name_eng TEXT,
+    role_name_fi TEXT,
+    role_value DEFAULT 0 NOT NULL,
+    FOREIGN KEY (player_id) REFERENCES players(id)
+    );
 
 CREATE TABLE users (
     id INTEGER PRIMARY KEY,
     username TEXT UNIQUE,
     password_hash TEXT
 );
+
+
+
        
  
