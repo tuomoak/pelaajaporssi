@@ -29,15 +29,10 @@ def create_player():
     profile = request.form["profile"]
     user_id = session["user_id"]
     
-    try:
-        player_id = players.add_player(name, defence_positions, batting_roles, profile, user_id)
-        flash("Uusi pelaaja lisätty.")
-    
-    except:
-        flash("Pelaajan lisääminen ei onnistunut.")
+    player_id = players.add_player(name, defence_positions, batting_roles, profile, user_id)
+    flash("Uusi pelaaja lisätty.")
 
     return redirect("/player/" + str(player_id))
-
 
 @app.route("/edit_player/<int:player_id>")
 def edit_player(player_id):
@@ -59,9 +54,6 @@ def update_player():
     
     players.update_player(player_id, name, defence_positions, batting_roles, profile)
     flash("Pelaajan muokatut tiedot")
-    
-    #except:
-    #    flash("Pelaajan tietojen muokkaaminen ei onnistunut.")
 
     return redirect("/player/" + str(player_id))
 

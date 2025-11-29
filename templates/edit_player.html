@@ -11,11 +11,18 @@
  
   <p><b>Pelaajan tietojen muokkaus</b></p>
 
+  {% for message in get_flashed_messages() %}
+  <p>
+    <b>{{ message }}</b>
+  </p>
+  {% endfor %}
+
   {% if session.user_id %}
 
   <form action="/update_player" method="post">
     <p>Pelaajan nimi: <br />
-      <textarea name="name" rows="1" cols="50">{{player.name}}</textarea>
+      <input type="text" name="name" id="name" value="{{player.name}}" required>
+      
     </p>
     <p>Mahdolliset ulkopeliroolit:</p>
     <p>
