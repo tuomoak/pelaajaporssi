@@ -1,9 +1,7 @@
 import db
 
-def add_player(firstname, surname, defence_positions, batting_roles, profile, user_id):
+def add_player(name, defence_positions, batting_roles, profile, user_id):
         
-    name=firstname + str(" ") + surname
-  
     columns = "NAME, PROFILE, user_id"
     column_places = "?,?,?"
     
@@ -45,9 +43,7 @@ def add_player(firstname, surname, defence_positions, batting_roles, profile, us
         """
        db.execute(sql,[new_id, str(eng_batting_role), str(fi_batting_role)])
 
-    #db.execute(f"INSERT INTO players ({columns}) VALUES ({column_places})",values)
-
-    return fi_defence_positions, fi_batting_roles
+    return last_id
 
 def get_players():
     sql = """
@@ -86,4 +82,11 @@ def get_player(player_id):
         bat_roles = db.query(sql, [player_id])
 
         return player_info, def_roles, bat_roles
-        #return db.query(sql, [player_id])[0]  
+
+def update_player(player_id, name, defence_positions, batting_roles, profile):
+
+    sql = """UPDATE players SET name = ?,
+                                profile = ?
+                                WHERE id = ?"""
+    
+    db.execute(sql, [name, profile, player_id])

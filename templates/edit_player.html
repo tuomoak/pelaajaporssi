@@ -2,20 +2,20 @@
 <html>
 
 <head>
-  <title>Pelaajan lisäys</title>
+  <title>Pelaajan tietojen muokkaus</title>
 </head>
 
 <body>
 
   <p><a href="/">Takaisin etusivulle</a></p>
  
-  <p><b>Uuden pelaajan lisääminen</b></p>
+  <p><b>Pelaajan tietojen muokkaus</b></p>
 
   {% if session.user_id %}
 
-  <form action="/create_player" method="post">
+  <form action="/update_player" method="post">
     <p>Pelaajan nimi: <br />
-      <textarea name="name" rows="1" cols="50"></textarea>
+      <textarea name="name" rows="1" cols="50">{{player.name}}</textarea>
     </p>
     <p>Mahdolliset ulkopeliroolit:</p>
     <p>
@@ -34,10 +34,11 @@
       <input type="checkbox" name="batting_role" value="joker|Jokeri" /> Jokeri
     </p>
     <p>Vapaaehtoinen teksti tai esittely:<br />
-      <textarea name="profile" rows="3" cols="50"></textarea>
+      <textarea name="profile" rows="3" cols="50">{{player.profile}}</textarea>
     </p>
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="submit" value="Lähetä" />
+    <input type="hidden" name="player_id" value="{{ player.id }}" />
+    <input type="submit" value="Muokkaa ilmoitusta" />
   </form>
   
   {% endif %}

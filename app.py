@@ -20,19 +20,48 @@ def index():
 def add_player():
     return render_template("add_player.html")
 
-@app.route("/result", methods=["POST"])
-def result():
+@app.route("/create_player", methods=["POST"])
+def create_player():
     check_csrf()
-    firstname = request.form["firstname"]
-    surname = request.form["surname"]
+    name = request.form["name"]
     defence_positions = request.form.getlist("defence_position")
     batting_roles = request.form.getlist("batting_role")
     profile = request.form["profile"]
     user_id = session["user_id"]
+    
+    try:
+        player_id = players.add_player(name, defence_positions, batting_roles, profile, user_id)
+        flash("Uusi pelaaja lisätty.")
+    
+    except:
+        flash("Pelaajan lisääminen ei onnistunut.")
 
-    fi_defence_positions, fi_batting_roles = players.add_player(firstname, surname, defence_positions, batting_roles, profile, user_id)
+    return redirect("/player/" + str(player_id))
 
-    return render_template("result.html", name=firstname + str(" ") + surname, defence_positions=fi_defence_positions, batting_roles=fi_batting_roles, profile=profile)
+
+@app.route("/edit_player/<int:player_id>")
+def edit_player(player_id):
+    player = players.get_player(player_id)
+    return render_template("/edit_player.html", player=player[0], def_roles=player[1], bat_roles=player[2])
+
+
+@app.route("/update_player", methods=["POST"])
+def update_player():
+    check_csrf()
+    player_id = request.form["player_id"]
+    name = request.form["name"]
+    defence_positions = request.form.getlist("defence_position")
+    batting_roles = request.form.getlist("batting_role")
+    profile = request.form["profile"]
+    
+    try:
+        players.update_player(player_id, name, defence_positions, batting_roles, profile)
+        flash("Pelaajan muokatut tiedot")
+    
+    except:
+        flash("Pelaajan tietojen muokkaaminen ei onnistunut.")
+
+    return redirect("/player/" + str(player_id))
 
 @app.route("/teams")
 def teams():
@@ -52,12 +81,10 @@ def player(player_id):
     player = players.get_player(player_id)
 
     return render_template("/show_player.html", player=player[0], def_roles=player[1], bat_roles=player[2])
-    
 
 @app.route("/team/<int:page_id>")
 def team(page_id):
     return "Tämä on joukkueen nro sivu: " + str(page_id)
-
 
 @app.route("/register")
 def register():

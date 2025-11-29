@@ -9,12 +9,25 @@
     
   <p><a href="/">Takaisin etusivulle</a> <a href="/players">Palvelussa olevat pelaajat</a> <a href="/teams">Palvelussa olevat joukkueet</a></p>
 
+{% for message in get_flashed_messages() %}
+  <p>
+    <b>{{ message }}</b>
+  </p>
+{% endfor %}
+
 <p>
   <b>{{player.name}}</b>
 </p>
 
+{% if session.user_id == player.user_id %}
 
-<b> Mahdolliset ulkopeliroolit:</b>
+<p>
+  <a href="/edit_player/{{ player.id }}"> Muokkaa </a>
+</p>
+
+{% endif %}
+
+Mahdolliset ulkopeliroolit:
 <ul>
 {% for row in def_roles%}
    <li>{{row['role_name_fi']}}</li> 
@@ -22,13 +35,17 @@
 {% endfor %}
 </ul>
 
-<b> Mahdolliset sisäpeliroolit:</b>
+Mahdolliset sisäpeliroolit:
 <ul>
 {% for row in bat_roles%}
    <li>{{row['role_name_fi']}}</li> 
     
 {% endfor %}
 </ul>
+
+<p>Esittely:</p>
+
+{{ player.profile}}
 
 </body>
 

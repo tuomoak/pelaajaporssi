@@ -14,7 +14,6 @@ CREATE TABLE player_def_roles (
     FOREIGN KEY (player_id) REFERENCES players(id)
     );
 
-
 CREATE TABLE player_bat_roles (
     player_id INTEGER,
     role_name_eng TEXT,
