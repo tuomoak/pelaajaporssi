@@ -1,10 +1,26 @@
 # pelaajaporssi
 
-Ohje sovelluksen testaajalle:
+Huom! 30.11.2025. Palautteen antajille:
+
+Committeja voi olla tulossa myös deadlinen jälkeisen viikon aikana. (Jotta pystyn edistää projektia myös tänä aikana.)
+
+Palautteen antaja toki saa keskittyä palautteessa täysin siihen versioon, josta palautteen antamisen on ennättänyt aloittaa.
+
+Aikataulu: 
+- Uusia committeja vain aikavälillä 23:30-00:00 tai klo 7:30-8:00. 
+
+- Eli keskellä päivää ei tule uusia päivityksiä.
+
+Muutokset:
+- Merkitsen tähän tiedostoon kaikki uudet muutokset tältä ajalta.
+
+---------------------
+Ohje sovelluksen testaajalle
+----------------------
 
 Sovelluksen käynnistys edellyttää:
 
-database.db-tiedoston luominen schema.sql-tiedoston avulla
+database.db-tiedosto schema.sql-tiedoston avulla
 
 Linuxissa:
 
