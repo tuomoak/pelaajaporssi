@@ -21,7 +21,7 @@
 
   <form action="/create_player" method="post">
     <p>Pelaajan nimi: <br />
-      <input type="text" name="name" id="name" value="{{name}}" required>
+      <input type="text" name="name" id="name" value="{{name}}" maxlength="40" required>
     </p>
     <p>Mahdolliset ulkopeliroolit:</p>
     <p>
@@ -50,7 +50,7 @@
       {% if 'joker' in bat_list%}checked{% endif %}/> Jokeri
     </p>
     <p>Vapaaehtoinen teksti tai esittely:<br />
-      <textarea name="profile" rows="3" cols="50">{{profile}}</textarea>
+      <textarea name="profile" rows="3" cols="50" maxlength="300">{{profile}}</textarea>
     </p>
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" value="Lähetä" />

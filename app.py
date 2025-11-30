@@ -15,6 +15,15 @@ def require_login():
     if "user_id" not in session:
         abort(403)
 
+def valid_roles(role):
+    valid_roles = ["pitcher|Lukkari","frontfield|Etukenttä", "midfield|Polttolinja", 
+                   "baseman|Pesävahti","outfielder|Takakenttä","runner|Etenijä",
+                   "advancehitter|Vaihtaja","runhitter|Kotiuttaja",
+                   "flyhitter|Kopittaja", "joker|Jokeri"]
+
+    if role not in valid_roles:
+        abort(403)
+
 @app.route("/")
 def index():
     message = "Pelaajapörssi on pesäpalloaiheinen sivusto, joka on tarkoitettu:"
@@ -30,6 +39,10 @@ def add_player():
 def find_player():
     require_login()
     query = request.args.get("query")
+
+    if len(query) > 100:
+        abort(403)
+
     if query:
         print(query)
         results = players.find_players(query)
@@ -47,7 +60,19 @@ def create_player():
     batting_roles = request.form.getlist("batting_role")
     profile = request.form["profile"]
     user_id = session["user_id"]
-    
+
+    if len(name) == 0:
+        abort(403)
+
+    if len(name) > 50 or len(profile) > 300:
+        abort(403)
+
+    for role in defence_positions:
+        valid_roles(role)
+
+    for role in batting_roles:
+        valid_roles(role)
+
     player_id = players.add_player(name, defence_positions, batting_roles, profile, user_id)
     flash("Uusi pelaaja lisätty.")
 
@@ -106,6 +131,18 @@ def update_player():
     profile = request.form["profile"]
 
     player = players.get_player(player_id)
+
+    for role in defence_positions:
+        valid_roles(role)
+
+    for role in batting_roles:
+        valid_roles(role)
+
+    if len(name) == 0:
+        abort(403)
+
+    if len(name) > 50 or len(profile) > 300:
+        abort(403)
 
     if not player[0]:
         abort(404)
