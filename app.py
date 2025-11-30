@@ -10,6 +10,11 @@ import players
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
+
+def require_login():
+    if "user_id" not in session:
+        abort(403)
+
 @app.route("/")
 def index():
     message = "Pelaajapörssi on pesäpalloaiheinen sivusto, joka on tarkoitettu:"
@@ -18,10 +23,12 @@ def index():
 
 @app.route("/add_player")
 def add_player():
+    require_login()
     return render_template("add_player.html")
 
 @app.route("/find_player")
 def find_player():
+    require_login()
     query = request.args.get("query")
     if query:
         print(query)
@@ -33,6 +40,7 @@ def find_player():
 
 @app.route("/create_player", methods=["POST"])
 def create_player():
+    require_login()
     check_csrf()
     name = request.form["name"]
     defence_positions = request.form.getlist("defence_position")
@@ -47,6 +55,7 @@ def create_player():
 
 @app.route("/edit_player/<int:player_id>")
 def edit_player(player_id):
+    require_login()
     player = players.get_player(player_id)
 
     if not player[0]:
@@ -64,6 +73,7 @@ def edit_player(player_id):
 
 @app.route("/remove_player/<int:player_id>", methods=["GET", "POST"])
 def remove_player(player_id):
+    require_login()
     player = players.get_player(player_id)
 
     if not player[0]:
@@ -87,6 +97,7 @@ def remove_player(player_id):
 
 @app.route("/update_player", methods=["POST"])
 def update_player():
+    require_login()
     check_csrf()
     player_id = request.form["player_id"]
     name = request.form["name"]
@@ -113,6 +124,7 @@ def teams():
 
 @app.route("/players")
 def show_players():
+    require_login()
 
     all_players = players.get_players()
         
@@ -131,6 +143,7 @@ def player(player_id):
 
 @app.route("/team/<int:page_id>")
 def team(page_id):
+    require_login()
     return "Tämä on joukkueen nro sivu: " + str(page_id)
 
 @app.route("/register")
@@ -186,10 +199,10 @@ def login():
 
 @app.route("/logout")
 def logout():
-    del session["username"]
-    del session["user_id"]
+    if "user_id" in session:
+        del session["username"]
+        del session["user_id"]
     return redirect("/")
-
 
 def check_csrf():
     if request.form["csrf_token"] != session["csrf_token"]:
