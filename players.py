@@ -101,18 +101,14 @@ def update_player(player_id, name, defence_positions, batting_roles, profile):
 
     for def_position in defence_positions:
        eng_def_position, fi_def_position = def_position.split("|")
-       sql = """
-        INSERT INTO player_def_roles (player_id, role_name_eng, role_name_fi, role_value)
-        VALUES (?, ?, ?, 1);
-        """
+       sql = """INSERT INTO player_def_roles (player_id, role_name_eng, role_name_fi, role_value)
+                VALUES (?, ?, ?, 1);"""
        db.execute(sql,[player_id, str(eng_def_position), str(fi_def_position)])
       
     for batting_role in batting_roles:
        eng_batting_role, fi_batting_role = batting_role.split("|")
-       sql = """
-        INSERT INTO player_bat_roles (player_id, role_name_eng, role_name_fi, role_value)
-        VALUES (?, ?, ?, 1);
-        """
+       sql = """INSERT INTO player_bat_roles (player_id, role_name_eng, role_name_fi, role_value)
+                VALUES (?, ?, ?, 1);"""
        db.execute(sql,[player_id, str(eng_batting_role), str(fi_batting_role)])
 
 def remove_player(player_id):
@@ -130,4 +126,10 @@ def remove_player(player_id):
     
     db.execute(sql, [player_id])
 
+def find_players(query):
 
+    sql = """
+        SELECT id, name FROM players WHERE name LIKE ? or profile like ?
+          """
+    like = "%" + query + "%"
+    return db.query(sql,[like, like])

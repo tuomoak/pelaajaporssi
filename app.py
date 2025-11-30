@@ -20,6 +20,17 @@ def index():
 def add_player():
     return render_template("add_player.html")
 
+@app.route("/find_player")
+def find_player():
+    query = request.args.get("query")
+    if query:
+        print(query)
+        results = players.find_players(query)
+    else:
+        query = ""
+        results = []
+    return render_template("find_player.html", query=query, results=results)
+
 @app.route("/create_player", methods=["POST"])
 def create_player():
     check_csrf()
