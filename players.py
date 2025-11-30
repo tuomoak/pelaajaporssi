@@ -52,9 +52,11 @@ def get_player(player_id):
                 WHERE id = ?;
               """
 
-        player_info = db.query(sql, [player_id])[0]
-                
-        
+        try:
+            player_info = db.query(sql, [player_id])[0]
+        except:
+            player_info = None
+
         sql = """
                 SELECT role_name_eng, role_name_fi
                 FROM player_def_roles
@@ -62,7 +64,6 @@ def get_player(player_id):
               """
         
         def_roles = db.query(sql, [player_id])
-
 
         sql = """
                 SELECT role_name_eng, role_name_fi
@@ -72,7 +73,9 @@ def get_player(player_id):
         
         bat_roles = db.query(sql, [player_id])
 
-        return player_info, def_roles, bat_roles
+        result = player_info, def_roles, bat_roles
+
+        return result if result else None
 
 def update_player(player_id, name, defence_positions, batting_roles, profile):
 
@@ -111,7 +114,6 @@ def update_player(player_id, name, defence_positions, batting_roles, profile):
        db.execute(sql,[player_id, str(eng_batting_role), str(fi_batting_role)])
 
 def remove_player(player_id):
-
 
     sql = "DELETE FROM player_bat_roles WHERE player_id = ?"
     

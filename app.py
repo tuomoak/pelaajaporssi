@@ -49,6 +49,9 @@ def create_player():
 def edit_player(player_id):
     player = players.get_player(player_id)
 
+    if not player[0]:
+        abort(404)
+
     if player[0]['user_id'] != session['user_id']:
         abort(403)
 
@@ -62,6 +65,9 @@ def edit_player(player_id):
 @app.route("/remove_player/<int:player_id>", methods=["GET", "POST"])
 def remove_player(player_id):
     player = players.get_player(player_id)
+
+    if not player[0]:
+        abort(404)
 
     if player[0]['user_id'] != session['user_id']:
             abort(403)
@@ -90,6 +96,9 @@ def update_player():
 
     player = players.get_player(player_id)
 
+    if not player[0]:
+        abort(404)
+
     if player[0]['user_id'] != session['user_id']:
             abort(403)
     
@@ -115,7 +124,10 @@ def player(player_id):
 
     player = players.get_player(player_id)
 
-    return render_template("/show_player.html", player=player[0], def_roles=player[1], bat_roles=player[2])
+    if not player[0]:
+        abort(404)
+    else:
+        return render_template("/show_player.html", player=player[0], def_roles=player[1], bat_roles=player[2])
 
 @app.route("/team/<int:page_id>")
 def team(page_id):
