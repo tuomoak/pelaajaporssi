@@ -40,11 +40,9 @@ def find_player():
     require_login()
     query = request.args.get("query")
 
-    if len(query) > 100:
-        abort(403)
-
     if query:
-        print(query)
+        if len(query) > 100:
+            abort(403)
         results = players.find_players(query)
     else:
         query = ""
