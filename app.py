@@ -49,14 +49,23 @@ def create_player():
 def edit_player(player_id):
     player = players.get_player(player_id)
 
-    def_list = {row[0] for row in player[1]}
-    bat_list = {row[0] for row in player[2]}
+    if player[0]['user_id'] != session['user_id']:
+        abort(403)
 
-    return render_template("/edit_player.html", player=player[0], def_list = def_list, bat_list=bat_list)
+    else:
+
+        def_list = {row[0] for row in player[1]}
+        bat_list = {row[0] for row in player[2]}
+
+        return render_template("/edit_player.html", player=player[0], def_list = def_list, bat_list=bat_list)
 
 @app.route("/remove_player/<int:player_id>", methods=["GET", "POST"])
 def remove_player(player_id):
-    
+    player = players.get_player(player_id)
+
+    if player[0]['user_id'] != session['user_id']:
+            abort(403)
+
     if request.method == "GET":
         player = players.get_player(player_id)
         return render_template("remove_player.html", player=player[0])
@@ -69,7 +78,6 @@ def remove_player(player_id):
             return redirect("/")
         else:
             return redirect("/player/" + str(player_id))
-    
 
 @app.route("/update_player", methods=["POST"])
 def update_player():
@@ -79,6 +87,11 @@ def update_player():
     defence_positions = request.form.getlist("defence_position")
     batting_roles = request.form.getlist("batting_role")
     profile = request.form["profile"]
+
+    player = players.get_player(player_id)
+
+    if player[0]['user_id'] != session['user_id']:
+            abort(403)
     
     players.update_player(player_id, name, defence_positions, batting_roles, profile)
     flash("Pelaajan muokatut tiedot")

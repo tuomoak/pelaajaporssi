@@ -44,7 +44,6 @@ def get_players():
     
     return db.query(sql)
 
-
 def get_player(player_id):
         
         sql = """
