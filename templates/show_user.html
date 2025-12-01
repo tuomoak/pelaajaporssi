@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Käyttäjän {{user.username}} tiedot</title>
+</head>
+
+<body>
+    
+  <p><a href="/">Takaisin etusivulle</a> <a href="/players">Palvelussa olevat pelaajat</a> <a href="/teams">Palvelussa olevat joukkueet</a></p>
+
+{% for message in get_flashed_messages() %}
+  <p>
+    <b>{{ message }}</b>
+  </p>
+{% endfor %}
+
+{% if session.user_id == user.id %}
+<H2> Sinun käyttäjäsivusi</H2> 
+<H3> Käyttäjänimi: {{user.username}} </H3>
+
+<p>Olet lisännyt yhteensä {{ players|length}} pelaajaa.</p>
+
+<b>Lisäämäsi pelaajat:</b>
+
+{% else %}
+<H2> Käyttäjä {{user.username}} </H2> 
+
+<p>Käyttäjä lisännyt yhteensä {{ players|length}} pelaajaa.</p>
+
+<b>Käyttäjän lisäämät pelaajat:</b>
+{% endif %}
+
+<ul>
+{% for player in players%}
+   <li> <a href="/player/{{ player.id }}" >{{ player.name }}</a>  </li>
+
+{% else %}
+  <li>Ei lisättyjä pelaajia.</li>
+    
+{% endfor %}
+</ul>
+
+</body>
+
+</html>

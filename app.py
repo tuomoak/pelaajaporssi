@@ -6,10 +6,16 @@ import db
 import config 
 import secrets
 import players
+import users
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
+@app.route("/")
+def index():
+    message = "Pelaajapörssi on pesäpalloaiheinen sivusto, joka on tarkoitettu:"
+    words = ["Joukkuetta etsiville", "Pelaajia etsiville"]
+    return render_template("index.html", message=message, items=words)
 
 def require_login():
     if "user_id" not in session:
@@ -23,12 +29,6 @@ def valid_roles(role):
 
     if role not in valid_roles:
         abort(403)
-
-@app.route("/")
-def index():
-    message = "Pelaajapörssi on pesäpalloaiheinen sivusto, joka on tarkoitettu:"
-    words = ["Joukkuetta etsiville", "Pelaajia etsiville"]
-    return render_template("index.html", message=message, items=words)
 
 @app.route("/add_player")
 def add_player():
@@ -174,7 +174,18 @@ def player(player_id):
     if not player[0]:
         abort(404)
     else:
-        return render_template("/show_player.html", player=player[0], def_roles=player[1], bat_roles=player[2])
+        return render_template("/show_player.html", player=player[0], def_roles=player[1], bat_roles=player[2], user = player[3])
+    
+@app.route("/user/<int:user_id>")
+def user(user_id):
+
+    user = users.get_user(user_id)
+
+    if not user:
+        abort(404)
+    else:
+        users_players = users.get_players(user_id)
+        return render_template("/show_user.html", user=user, players = users_players)
 
 @app.route("/team/<int:page_id>")
 def team(page_id):

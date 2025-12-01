@@ -14,6 +14,8 @@ Aikataulu:
 Muutokset:
 - Merkitsen tähän tiedostoon kaikki uudet muutokset tältä ajalta.
 
+- MA: 1.12.2025: Käyttäjäsivu
+
 ---------------------
 Ohje sovelluksen testaajalle
 ----------------------

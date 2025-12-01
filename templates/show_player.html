@@ -17,6 +17,7 @@
 
 <p>
   <b>{{player.name}}</b>
+  <p>Lisännyt: <a href="/user/{{ player.user_id }}"> {{ user.username }} </a></p>
 </p>
 
 {% if session.user_id == player.user_id %}
