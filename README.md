@@ -14,7 +14,7 @@ Aikataulu:
 Muutokset:
 - Merkitsen tähän tiedostoon kaikki uudet muutokset tältä ajalta.
 
-- MA: 1.12.2025: Käyttäjäsivu
+- MA: 1.12.2025: Käyttäjäsivu + Rekisteröinnin ja kirjautumisen muokkaus
 
 ---------------------
 Ohje sovelluksen testaajalle
