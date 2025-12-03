@@ -195,13 +195,21 @@ def team(page_id):
 def register():
     return render_template("register.html")
 
-@app.route("/create", methods=["POST"])
-def create():
+@app.route("/register_user", methods=["POST"])
+def register_user():
     username = request.form["username"]
     password1 = request.form["password1"]
     password2 = request.form["password2"]
     if password1 != password2:
         flash("VIRHE: salasanat eivät ole samat")
+        return redirect("/register")
+    
+    if len(username) == 0:
+        flash("Käyttäjätunnus ei voi olla tyhjä")
+        return redirect("/register")
+
+    if len(password1) == 0:
+        flash("Salasana ei voi olla tyhjä")
         return redirect("/register")
 
     try:
