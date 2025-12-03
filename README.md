@@ -16,6 +16,10 @@ Muutokset:
 
 - MA: 1.12.2025: Käyttäjäsivu + Rekisteröinnin ja kirjautumisen muokkaus
 
+- KE 3.12.2025: Korjattu tyhjän käyttäjän rekisteröinti.
+
+Huom! Sain palautetta, että pelaajan poistaminen ei toiminut. En onnistunut toistamaan tätä virhettä itse. Kiinnostaa tietää, jos muillakin tämä ongelma.
+
 ---------------------
 Ohje sovelluksen testaajalle
 ----------------------
