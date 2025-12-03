@@ -112,7 +112,7 @@ def remove_player(player_id):
         check_csrf()
         if "remove" in request.form:
             players.remove_player(player_id)
-            flash("Pelaajan tiedot poistettu")
+            flash("Pelaaja poistettu")
             return redirect("/")
         else:
             return redirect("/player/" + str(player_id))

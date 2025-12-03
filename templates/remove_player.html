@@ -9,7 +9,7 @@
 
   <p><a href="/">Takaisin etusivulle</a></p>
  
-  <p><b>Pelaajan tietojen poistaminen</b></p>
+  <p><b>Pelaajan poistaminen</b></p>
 
   {% for message in get_flashed_messages() %}
   <p>
@@ -22,7 +22,7 @@
   <form action="/remove_player/{{player.id}}" method="post">
 
     <p> Pelaaja: {{player.name}}</p>
-    <p> Haluatko varmasti poistaa tämän ilmoituksen?</p>
+    <p> Haluatko varmasti poistaa tämän pelaajan?</p>
    
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     
@@ -33,7 +33,5 @@
   
   {% endif %}
 </body>
-
-
 
 </html>

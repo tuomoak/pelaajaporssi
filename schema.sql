@@ -27,8 +27,3 @@ CREATE TABLE users (
     username TEXT UNIQUE,
     password_hash TEXT
 );
-
-
-
-       
- 
