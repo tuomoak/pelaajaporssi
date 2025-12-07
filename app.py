@@ -31,8 +31,8 @@ def valid_roles(role):
 @app.route("/add_player")
 def add_player():
     require_login()
-    return render_template("add_player.html")
-
+    classes = players.get_all_classes()
+    return render_template("add_player.html", classes=classes)
 
 @app.route("/find_player")
 def find_player():
@@ -56,14 +56,12 @@ def create_player():
     defence_positions = request.form.getlist("defence_position")
     batting_roles = request.form.getlist("batting_role")
     profile = request.form["profile"]
-   
     user_id = session["user_id"]
-
-    classes = []
     
-    seriousness = request.form["seriousness"]
-    if seriousness:
-        classes.append(('Vakavuusaste',seriousness)) 
+    classes = []
+    for entry in request.form.getlist("classes"):
+        parts = entry.split(":")
+        classes.append((parts[0],parts[1]))
 
     if len(name) == 0:
         abort(403)
@@ -96,14 +94,15 @@ def edit_player(player_id):
     else:
         def_list = {row[0] for row in player[1]}
         bat_list = {row[0] for row in player[2]}
-        
-        classes = players.get_classes(player_id)
+
+        player_classes = players.get_classes(player_id)
+        all_classes = players.get_all_classes()
 
         selected = {}
-        if classes:
-            selected = {row[1] for row in classes}
+        if player_classes:
+            selected = {row[1] for row in player_classes}
 
-        return render_template("/edit_player.html", player=player[0], def_list = def_list, bat_list=bat_list, classes = classes, selected = selected)
+        return render_template("/edit_player.html", player=player[0], def_list = def_list, bat_list=bat_list, classes = all_classes, selected = selected)
 
 @app.route("/update_player", methods=["POST"])
 def update_player():
@@ -118,9 +117,9 @@ def update_player():
     player = players.get_player(player_id)
 
     classes = []
-    seriousness = request.form["seriousness"]
-    if seriousness:
-        classes.append(('Vakavuusaste',seriousness)) 
+    for entry in request.form.getlist("classes"):
+        parts = entry.split(":")
+        classes.append((parts[0],parts[1]))
 
     for role in defence_positions:
         valid_roles(role)

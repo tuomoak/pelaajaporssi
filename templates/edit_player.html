@@ -22,18 +22,19 @@
   <form action="/update_player" method="post">
     <p>Pelaajan nimi: <br />
       <input type="text" name="name" id="name" value="{{player.name}}" maxlength="50" required>
-
-    <p>Vakavuusaste:
-    <select name="seriousness">
-    <option value="">valitse</option>
-    <option value="harrastaja"
-    {% if 'harrastaja' in selected %}selected{% endif %}>harrastaja</option>
-    <option value="kilpataso"
-    {% if 'kilpataso' in selected %}selected{% endif %}>kilpataso</option>
-    <option value="jäähdyttelijä"
-    {% if 'jäähdyttelijä' in selected %}selected{% endif %}>jäähdyttelijä</option>
+      
+  {% for class in classes %}
+  <p>
+    {{ class }}:
+    <select name="classes" id="class{{ class }}">
+      <option value="">(valitse)</option>
+    {% for option in classes[class] %}
+      <option value="{{ class }}:{{ option }}"
+      {% if option in selected %}selected{% endif %}>{{ option }}</option>
+    {% endfor %}
     </select>
-    </p>
+  </p>
+    {% endfor %}
       
     </p>
     <p>Mahdolliset ulkopeliroolit:</p>

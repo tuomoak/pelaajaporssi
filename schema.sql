@@ -22,6 +22,14 @@ CREATE TABLE player_bat_roles (
     FOREIGN KEY (player_id) REFERENCES players(id)
     );
 
+
+CREATE TABLE classes (
+    id INTEGER PRIMARY KEY,
+    title TEXT,
+    value TEXT
+);
+
+
 CREATE TABLE player_classes (
     player_id INTEGER,
     title TEXT,
