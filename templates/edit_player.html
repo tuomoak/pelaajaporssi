@@ -25,12 +25,13 @@
 
     <p>Vakavuusaste:
     <select name="seriousness">
+    <option value="">valitse</option>
     <option value="harrastaja"
-    {% if seriousness.seriousness == 'harrastaja'%}selected{% endif %}>harrastaja</option>
+    {% if 'harrastaja' in selected %}selected{% endif %}>harrastaja</option>
     <option value="kilpataso"
-    {% if seriousness.seriousness == 'kilpataso'%}selected{% endif %}>kilpataso</option>
+    {% if 'kilpataso' in selected %}selected{% endif %}>kilpataso</option>
     <option value="jäähdyttelijä"
-    {% if seriousness.seriousness == 'jäähdyttelijä'%}selected{% endif %}>jäähdyttelijä</option>
+    {% if 'jäähdyttelijä' in selected %}selected{% endif %}>jäähdyttelijä</option>
     </select>
     </p>
       
@@ -71,7 +72,5 @@
   
   {% endif %}
 </body>
-
-
 
 </html>

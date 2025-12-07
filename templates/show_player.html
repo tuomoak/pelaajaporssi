@@ -28,10 +28,15 @@
 </p>
 
 {% endif %}
+<p>
+{% if classes %}
+  {% for class in classes %}
+  <li>{{ class.title}}: {{ class.value }}</li>
+  {% endfor %}
+{% endif %}
+</p>
 
-<p>Vakavuusaste: {{seriousness.seriousness}}</p>
-
-Mahdolliset ulkopeliroolit:
+<p>Mahdolliset ulkopeliroolit:</p>
 <ul>
 {% for row in def_roles%}
    <li>{{row['role_name_fi']}}</li> 
@@ -39,7 +44,7 @@ Mahdolliset ulkopeliroolit:
 {% endfor %}
 </ul>
 
-Mahdolliset sisäpeliroolit:
+<p>Mahdolliset sisäpeliroolit:</p>
 <ul>
 {% for row in bat_roles%}
    <li>{{row['role_name_fi']}}</li> 

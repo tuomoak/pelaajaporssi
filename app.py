@@ -33,6 +33,7 @@ def add_player():
     require_login()
     return render_template("add_player.html")
 
+
 @app.route("/find_player")
 def find_player():
     require_login()
@@ -55,9 +56,14 @@ def create_player():
     defence_positions = request.form.getlist("defence_position")
     batting_roles = request.form.getlist("batting_role")
     profile = request.form["profile"]
-    seriousness = request.form["seriousness"]
+   
     user_id = session["user_id"]
+
+    classes = []
     
+    seriousness = request.form["seriousness"]
+    if seriousness:
+        classes.append(('Vakavuusaste',seriousness)) 
 
     if len(name) == 0:
         abort(403)
@@ -71,7 +77,7 @@ def create_player():
     for role in batting_roles:
         valid_roles(role)
 
-    player_id = players.add_player(name, defence_positions, batting_roles, profile, user_id, seriousness)
+    player_id = players.add_player(name, defence_positions, batting_roles, profile, user_id, classes)
     flash("Uusi pelaaja lisätty.")
 
     return redirect("/player/" + str(player_id))
@@ -88,11 +94,57 @@ def edit_player(player_id):
         abort(403)
 
     else:
-
         def_list = {row[0] for row in player[1]}
         bat_list = {row[0] for row in player[2]}
+        
+        classes = players.get_classes(player_id)
 
-        return render_template("/edit_player.html", player=player[0], def_list = def_list, bat_list=bat_list, seriousness = player[4])
+        selected = {}
+        if classes:
+            selected = {row[1] for row in classes}
+
+        return render_template("/edit_player.html", player=player[0], def_list = def_list, bat_list=bat_list, classes = classes, selected = selected)
+
+@app.route("/update_player", methods=["POST"])
+def update_player():
+    require_login()
+    check_csrf()
+    player_id = request.form["player_id"]
+    name = request.form["name"]
+    defence_positions = request.form.getlist("defence_position")
+    batting_roles = request.form.getlist("batting_role")
+    profile = request.form["profile"]
+
+    player = players.get_player(player_id)
+
+    classes = []
+    seriousness = request.form["seriousness"]
+    if seriousness:
+        classes.append(('Vakavuusaste',seriousness)) 
+
+    for role in defence_positions:
+        valid_roles(role)
+
+    for role in batting_roles:
+        valid_roles(role)
+
+    if len(name) == 0:
+        abort(403)
+
+    if len(name) > 50 or len(profile) > 300:
+        abort(403)
+
+    if not player[0]:
+        abort(404)
+
+    if player[0]['user_id'] != session['user_id']:
+        abort(403)
+
+    players.update_player(player_id, name, defence_positions, batting_roles, profile, classes)
+    flash("Pelaajan muokatut tiedot")
+
+    return redirect("/player/" + str(player_id))
+
 
 @app.route("/remove_player/<int:player_id>", methods=["GET", "POST"])
 def remove_player(player_id):
@@ -118,41 +170,6 @@ def remove_player(player_id):
         else:
             return redirect("/player/" + str(player_id))
 
-@app.route("/update_player", methods=["POST"])
-def update_player():
-    require_login()
-    check_csrf()
-    player_id = request.form["player_id"]
-    name = request.form["name"]
-    seriousness = request.form["seriousness"]
-    defence_positions = request.form.getlist("defence_position")
-    batting_roles = request.form.getlist("batting_role")
-    profile = request.form["profile"]
-
-    player = players.get_player(player_id)
-
-    for role in defence_positions:
-        valid_roles(role)
-
-    for role in batting_roles:
-        valid_roles(role)
-
-    if len(name) == 0:
-        abort(403)
-
-    if len(name) > 50 or len(profile) > 300:
-        abort(403)
-
-    if not player[0]:
-        abort(404)
-
-    if player[0]['user_id'] != session['user_id']:
-        abort(403)
-
-    players.update_player(player_id, name, defence_positions, batting_roles, profile, seriousness)
-    flash("Pelaajan muokatut tiedot")
-
-    return redirect("/player/" + str(player_id))
 
 @app.route("/teams")
 def teams():
@@ -175,7 +192,8 @@ def player(player_id):
     if not player[0]:
         abort(404)
     else:
-        return render_template("/show_player.html", player=player[0], def_roles=player[1], bat_roles=player[2], user = player[3], seriousness = player[4])
+        classes = players.get_classes(player_id)
+        return render_template("/show_player.html", player=player[0], def_roles=player[1], bat_roles=player[2], user = player[3], classes = classes)
 
 @app.route("/user/<int:user_id>")
 def user(user_id):

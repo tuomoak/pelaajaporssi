@@ -22,9 +22,10 @@ CREATE TABLE player_bat_roles (
     FOREIGN KEY (player_id) REFERENCES players(id)
     );
 
-CREATE TABLE player_meta (
+CREATE TABLE player_classes (
     player_id INTEGER,
-    seriousness TEXT,
+    title TEXT,
+    value TEXT,
     FOREIGN KEY (player_id) REFERENCES players(id)
     );
 

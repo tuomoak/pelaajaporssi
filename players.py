@@ -1,6 +1,6 @@
 import db
 
-def add_player(name, defence_positions, batting_roles, profile, user_id, seriousness):
+def add_player(name, defence_positions, batting_roles, profile, user_id, classes):
         
     columns = "NAME, PROFILE, user_id"
     column_places = "?,?,?"
@@ -19,9 +19,10 @@ def add_player(name, defence_positions, batting_roles, profile, user_id, serious
             
     new_id = last_id
 
-    sql = "INSERT INTO player_meta (player_id, seriousness) VALUES (?, ?);"
-                                                                   
-    db.execute(sql,[new_id, seriousness])                                                     
+    ### classes
+    for title, value in classes:
+        sql = "INSERT INTO player_classes (player_id, title, value) VALUES (?, ?, ?);"
+        db.execute(sql,[new_id, title, value])
 
     for def_position in defence_positions:
        eng_def_position, fi_def_position = def_position.split("|")
@@ -48,6 +49,11 @@ def get_players():
     
     return db.query(sql)
 
+def get_classes(player_id):
+    sql = "SELECT title, value FROM player_classes WHERE player_id = ?;"
+
+    return db.query(sql, [player_id])
+
 def get_player(player_id):
         
         sql = """
@@ -73,11 +79,6 @@ def get_player(player_id):
             user_info = db.query(sql, [user_id])[0]
         except:
             user_info = None
-
-        ### seriousness
-        sql = "SELECT seriousness FROM player_meta WHERE player_id = ?;"
-        
-        serious_level = db.query(sql, [player_id])[0]
         
         ### defence_roles
         sql = """
@@ -98,11 +99,11 @@ def get_player(player_id):
         bat_roles = db.query(sql, [player_id])
 
         ### result
-        result = player_info, def_roles, bat_roles, user_info, serious_level
+        result = player_info, def_roles, bat_roles, user_info
 
         return result if result else None
 
-def update_player(player_id, name, defence_positions, batting_roles, profile, seriousness):
+def update_player(player_id, name, defence_positions, batting_roles, profile, classes):
 
     sql = """UPDATE players SET name = ?,
                                 profile = ?
@@ -110,16 +111,15 @@ def update_player(player_id, name, defence_positions, batting_roles, profile, se
     
     db.execute(sql, [name, profile, player_id])
 
-    sql = """UPDATE player_meta SET seriousness = ?
+
+    ### remove old classes
+    sql = """DELETE FROM player_classes
                                 WHERE player_id = ?"""
-    
-    db.execute(sql, [seriousness, player_id])
+    db.execute(sql, [player_id])
 
     #### removes old def roles
-
     sql = """DELETE FROM player_def_roles
                             WHERE player_id = ?"""
-
     db.execute(sql, [player_id])
  
     ### removes old bat roles
@@ -128,7 +128,10 @@ def update_player(player_id, name, defence_positions, batting_roles, profile, se
 
     db.execute(sql, [player_id])
 
-    #### updates def and bat roles
+    #### updates classes, def and bat roles
+    for title, value in classes:
+        sql = "INSERT INTO player_classes (player_id, title, value) VALUES (?, ?, ?);"
+        db.execute(sql,[player_id, title, value])
 
     for def_position in defence_positions:
        eng_def_position, fi_def_position = def_position.split("|")
@@ -144,7 +147,7 @@ def update_player(player_id, name, defence_positions, batting_roles, profile, se
 
 def remove_player(player_id):
 
-    sql = "DELETE FROM player_meta WHERE player_id = ?"
+    sql = "DELETE FROM player_classes WHERE player_id = ?"
     
     db.execute(sql, [player_id])
 
