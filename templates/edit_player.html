@@ -22,6 +22,17 @@
   <form action="/update_player" method="post">
     <p>Pelaajan nimi: <br />
       <input type="text" name="name" id="name" value="{{player.name}}" maxlength="50" required>
+
+    <p>Vakavuusaste:
+    <select name="seriousness">
+    <option value="harrastaja"
+    {% if seriousness.seriousness == 'harrastaja'%}selected{% endif %}>harrastaja</option>
+    <option value="kilpataso"
+    {% if seriousness.seriousness == 'kilpataso'%}selected{% endif %}>kilpataso</option>
+    <option value="jäähdyttelijä"
+    {% if seriousness.seriousness == 'jäähdyttelijä'%}selected{% endif %}>jäähdyttelijä</option>
+    </select>
+    </p>
       
     </p>
     <p>Mahdolliset ulkopeliroolit:</p>

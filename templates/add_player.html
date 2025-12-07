@@ -21,8 +21,17 @@
 
   <form action="/create_player" method="post">
     <p>Pelaajan nimi: <br />
-      <input type="text" name="name" id="name" value="{{name}}" maxlength="40" required>
+      <input type="text" name="name" id="name" value="{{name}}" maxlength="50" required>
     </p>
+       
+  <p>Vakavuusaste:
+    <select name="seriousness">
+    <option value="harrastaja">harrastaja</option>
+    <option value="kilpataso">kilpataso</option>
+    <option value="jäähdyttelijä">jäähdyttelijä</option>
+    </select>
+  </p>
+
     <p>Mahdolliset ulkopeliroolit:</p>
     <p>
       <input type="checkbox" name="defence_position" value="pitcher|Lukkari"

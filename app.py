@@ -1,9 +1,8 @@
 import sqlite3
+import secrets
 from flask import Flask
 from flask import redirect, render_template, request, session, flash, abort
-import db
-import config 
-import secrets
+import config
 import players
 import users
 
@@ -56,7 +55,9 @@ def create_player():
     defence_positions = request.form.getlist("defence_position")
     batting_roles = request.form.getlist("batting_role")
     profile = request.form["profile"]
+    seriousness = request.form["seriousness"]
     user_id = session["user_id"]
+    
 
     if len(name) == 0:
         abort(403)
@@ -70,7 +71,7 @@ def create_player():
     for role in batting_roles:
         valid_roles(role)
 
-    player_id = players.add_player(name, defence_positions, batting_roles, profile, user_id)
+    player_id = players.add_player(name, defence_positions, batting_roles, profile, user_id, seriousness)
     flash("Uusi pelaaja lisätty.")
 
     return redirect("/player/" + str(player_id))
@@ -91,7 +92,7 @@ def edit_player(player_id):
         def_list = {row[0] for row in player[1]}
         bat_list = {row[0] for row in player[2]}
 
-        return render_template("/edit_player.html", player=player[0], def_list = def_list, bat_list=bat_list)
+        return render_template("/edit_player.html", player=player[0], def_list = def_list, bat_list=bat_list, seriousness = player[4])
 
 @app.route("/remove_player/<int:player_id>", methods=["GET", "POST"])
 def remove_player(player_id):
@@ -102,7 +103,7 @@ def remove_player(player_id):
         abort(404)
 
     if player[0]['user_id'] != session['user_id']:
-            abort(403)
+        abort(403)
 
     if request.method == "GET":
         player = players.get_player(player_id)
@@ -123,6 +124,7 @@ def update_player():
     check_csrf()
     player_id = request.form["player_id"]
     name = request.form["name"]
+    seriousness = request.form["seriousness"]
     defence_positions = request.form.getlist("defence_position")
     batting_roles = request.form.getlist("batting_role")
     profile = request.form["profile"]
@@ -145,9 +147,9 @@ def update_player():
         abort(404)
 
     if player[0]['user_id'] != session['user_id']:
-            abort(403)
-    
-    players.update_player(player_id, name, defence_positions, batting_roles, profile)
+        abort(403)
+
+    players.update_player(player_id, name, defence_positions, batting_roles, profile, seriousness)
     flash("Pelaajan muokatut tiedot")
 
     return redirect("/player/" + str(player_id))
@@ -161,7 +163,7 @@ def show_players():
     require_login()
 
     all_players = players.get_players()
-        
+
     count = len(all_players)
     return render_template("/players.html", count=count, all_players=all_players)
 
@@ -173,8 +175,8 @@ def player(player_id):
     if not player[0]:
         abort(404)
     else:
-        return render_template("/show_player.html", player=player[0], def_roles=player[1], bat_roles=player[2], user = player[3])
-    
+        return render_template("/show_player.html", player=player[0], def_roles=player[1], bat_roles=player[2], user = player[3], seriousness = player[4])
+
 @app.route("/user/<int:user_id>")
 def user(user_id):
 
@@ -203,7 +205,7 @@ def register_user():
     if password1 != password2:
         flash("VIRHE: salasanat eivät ole samat")
         return redirect("/register")
-    
+
     if len(username) == 0:
         flash("Käyttäjätunnus ei voi olla tyhjä")
         return redirect("/register")
