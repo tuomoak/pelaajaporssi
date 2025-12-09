@@ -39,33 +39,19 @@
   </p>
     {% endfor %}
       
-    </p>
-    <p>Mahdolliset ulkopeliroolit:</p>
-    <p>
-      <input type="checkbox" name="defence_position" value="pitcher|Lukkari"
-      {% if 'pitcher' in def_list%}checked{% endif %} /> Lukkari
-      <input type="checkbox" name="defence_position" value="frontfield|Etukenttä" 
-      {% if 'frontfield' in def_list%}checked{% endif %}/> Etukenttä
-      <input type="checkbox" name="defence_position" value="midfield|Polttolinja" 
-      {% if 'midfield' in def_list%}checked{% endif %}/> Polttolinja
-      <input type="checkbox" name="defence_position" value="baseman|Pesävahti" 
-      {% if 'baseman' in def_list%}checked{% endif %}/> Pesävahti
-      <input type="checkbox" name="defence_position" value="outfielder|Takakenttä" 
-      {% if 'outfielder' in def_list%}checked{% endif %}/> Takakenttä
-    </p>
-      <p>Luontevimmat sisäpeliroolit:</p>
-    <p>
-      <input type="checkbox" name="batting_role" value="runner|Etenijä" 
-      {% if 'runner' in bat_list%}checked{% endif %}/> Etenijä
-      <input type="checkbox" name="batting_role" value="advancehitter|Vaihtaja" 
-      {% if 'advancehitter' in bat_list%}checked{% endif %}/> Vaihtaja
-      <input type="checkbox" name="batting_role" value="runhitter|Kotiuttaja" 
-      {% if 'runhitter' in bat_list%}checked{% endif %}/> Kotiuttaja
-      <input type="checkbox" name="batting_role" value="flyhitter|Kopittaja" 
-      {% if 'flyhitter' in bat_list%}checked{% endif %}/> Kopittaja
-      <input type="checkbox" name="batting_role" value="joker|Jokeri" 
-      {% if 'joker' in bat_list%}checked{% endif %}/> Jokeri
-    </p>
+
+  {% for role in roles %}
+    <p>Mahdolliset {{role}}:</p>
+      {% for option in roles[role] %}
+        {% if option in selected %}
+        <input type="checkbox" name="roles"value="{{role}}:{{option}}" checked/> {{ option }}
+        {% else %}
+        <input type="checkbox" name="roles"value="{{role}}:{{option}}"/> {{ option }}
+        {% endif %}
+
+      {% endfor %}
+    {% endfor %}
+        
     <p>Vapaaehtoinen teksti tai esittely:<br />
       <textarea name="profile" rows="3" cols="50" maxlength="300">{{player.profile}}</textarea>
     </p>

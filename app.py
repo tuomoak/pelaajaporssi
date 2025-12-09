@@ -19,20 +19,30 @@ def require_login():
     if "user_id" not in session:
         abort(403)
 
-def valid_roles(role):
-    valid_roles = ["pitcher|Lukkari","frontfield|Etukenttä", "midfield|Polttolinja", 
-                   "baseman|Pesävahti","outfielder|Takakenttä","runner|Etenijä",
-                   "advancehitter|Vaihtaja","runhitter|Kotiuttaja",
-                   "flyhitter|Kopittaja", "joker|Jokeri"]
+def valid_roles(roletype, role):
 
-    if role not in valid_roles:
+    valid_roles = players.get_all_roles()
+
+    if roletype not in valid_roles:
+        abort(403)
+    if role not in valid_roles[roletype]:
+        abort(403)
+
+def valid_class(classtype, value):
+
+    valid_classes = players.get_all_classes()
+    
+    if classtype not in valid_classes:
+        abort(403)
+    if value not in valid_classes[classtype]:
         abort(403)
 
 @app.route("/add_player")
 def add_player():
     require_login()
     classes = players.get_all_classes()
-    return render_template("add_player.html", classes=classes)
+    roles = players.get_all_roles()
+    return render_template("add_player.html", classes=classes, roles = roles)
 
 @app.route("/find_player")
 def find_player():
@@ -53,8 +63,6 @@ def create_player():
     require_login()
     check_csrf()
     name = request.form["name"]
-    defence_positions = request.form.getlist("defence_position")
-    batting_roles = request.form.getlist("batting_role")
     profile = request.form["profile"]
     user_id = session["user_id"]
     
@@ -63,20 +71,24 @@ def create_player():
         if entry:
             parts = entry.split(":")
             classes.append((parts[0],parts[1]))
+            valid_class(parts[0], parts[1])
+
+    roles = []
+    for entry in request.form.getlist("roles"):
+        if entry:
+            parts = entry.split(":")
+            roles.append((parts[0],parts[1]))
+            
+            ### checks is input valid
+            valid_roles(parts[0], parts[1])
 
     if len(name) == 0:
         abort(403)
 
     if len(name) > 50 or len(profile) > 300:
         abort(403)
-
-    for role in defence_positions:
-        valid_roles(role)
-
-    for role in batting_roles:
-        valid_roles(role)
-
-    player_id = players.add_player(name, defence_positions, batting_roles, profile, user_id, classes)
+    
+    player_id = players.add_player(name, profile, user_id, classes, roles)
     flash("Uusi pelaaja lisätty.")
 
     return redirect("/player/" + str(player_id))
@@ -93,17 +105,22 @@ def edit_player(player_id):
         abort(403)
 
     else:
-        def_list = {row[0] for row in player[1]}
-        bat_list = {row[0] for row in player[2]}
-
-        player_classes = players.get_classes(player_id)
         all_classes = players.get_all_classes()
+        player_classes = players.get_classes(player_id)
+        
+        all_roles = players.get_all_roles()
+        player_roles = players.get_roles(player_id)
 
-        selected = {}
+        ### collecs info which already selected
+        selected = set()
         if player_classes:
-            selected = {row[1] for row in player_classes}
+            for entry in player_classes:
+                selected.add(entry[1])
+        if player_roles: 
+            for role in player_roles:
+                selected.add(role[1])
 
-        return render_template("/edit_player.html", player=player[0], def_list = def_list, bat_list=bat_list, classes = all_classes, selected = selected)
+        return render_template("/edit_player.html", player=player[0], classes = all_classes, roles = all_roles, selected = selected)
 
 @app.route("/update_player", methods=["POST"])
 def update_player():
@@ -111,8 +128,6 @@ def update_player():
     check_csrf()
     player_id = request.form["player_id"]
     name = request.form["name"]
-    defence_positions = request.form.getlist("defence_position")
-    batting_roles = request.form.getlist("batting_role")
     profile = request.form["profile"]
 
     player = players.get_player(player_id)
@@ -121,14 +136,20 @@ def update_player():
     for entry in request.form.getlist("classes"):
         if entry:
             parts = entry.split(":")
+            ### checks is input valid
+            valid_class(parts[0], parts[1])
+
             classes.append((parts[0],parts[1]))
-        
-    for role in defence_positions:
-        valid_roles(role)
 
-    for role in batting_roles:
-        valid_roles(role)
+    roles = []
+    for entry in request.form.getlist("roles"):
+        if entry:
+            parts = entry.split(":")
+            ### check if input valid
+            valid_roles(parts[0], parts[1])
 
+            roles.append((parts[0],parts[1]))
+               
     if len(name) == 0:
         abort(403)
 
@@ -141,11 +162,10 @@ def update_player():
     if player[0]['user_id'] != session['user_id']:
         abort(403)
 
-    players.update_player(player_id, name, defence_positions, batting_roles, profile, classes)
+    players.update_player(player_id, name, profile, classes, roles)
     flash("Pelaajan muokatut tiedot")
 
     return redirect("/player/" + str(player_id))
-
 
 @app.route("/remove_player/<int:player_id>", methods=["GET", "POST"])
 def remove_player(player_id):
@@ -171,7 +191,6 @@ def remove_player(player_id):
         else:
             return redirect("/player/" + str(player_id))
 
-
 @app.route("/teams")
 def teams():
     return "Tähän tulee palvelussa olevat joukkueet."
@@ -194,7 +213,8 @@ def player(player_id):
         abort(404)
     else:
         classes = players.get_classes(player_id)
-        return render_template("/show_player.html", player=player[0], def_roles=player[1], bat_roles=player[2], user = player[3], classes = classes)
+        all_roles = players.get_all_roles()
+        return render_template("/show_player.html", player=player[0], user = player[1], classes = classes, roles=player[2], all_roles = all_roles)
 
 @app.route("/user/<int:user_id>")
 def user(user_id):

@@ -1,3 +1,9 @@
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY,
+    username TEXT UNIQUE,
+    password_hash TEXT
+);
+
 CREATE TABLE players (
     id INTEGER PRIMARY KEY,
     NAME TEXT,
@@ -6,22 +12,19 @@ CREATE TABLE players (
     );
 
 
-CREATE TABLE player_def_roles (
+CREATE TABLE roles (
+    id INTEGER PRIMARY KEY,
+    title TEXT,
+    value TEXT
+);
+
+CREATE TABLE player_roles (
     player_id INTEGER,
-    role_name_eng TEXT,
-    role_name_fi TEXT,
+    role_type TEXT,
+    role_name TEXT,
     role_value DEFAULT 0 NOT NULL,
     FOREIGN KEY (player_id) REFERENCES players(id)
     );
-
-CREATE TABLE player_bat_roles (
-    player_id INTEGER,
-    role_name_eng TEXT,
-    role_name_fi TEXT,
-    role_value DEFAULT 0 NOT NULL,
-    FOREIGN KEY (player_id) REFERENCES players(id)
-    );
-
 
 CREATE TABLE classes (
     id INTEGER PRIMARY KEY,
@@ -29,17 +32,9 @@ CREATE TABLE classes (
     value TEXT
 );
 
-
 CREATE TABLE player_classes (
     player_id INTEGER,
     title TEXT,
     value TEXT,
     FOREIGN KEY (player_id) REFERENCES players(id)
     );
-
-
-CREATE TABLE users (
-    id INTEGER PRIMARY KEY,
-    username TEXT UNIQUE,
-    password_hash TEXT
-);

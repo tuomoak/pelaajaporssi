@@ -36,21 +36,18 @@
 {% endif %}
 </p>
 
-<p>Mahdolliset ulkopeliroolit:</p>
-<ul>
-{% for row in def_roles%}
-   <li>{{row['role_name_fi']}}</li> 
-    
-{% endfor %}
-</ul>
 
-<p>Mahdolliset sisäpeliroolit:</p>
-<ul>
-{% for row in bat_roles%}
-   <li>{{row['role_name_fi']}}</li> 
+{% for role_type in all_roles %}
+  <p>Mahdolliset {{ role_type }}:</p>
+    <ul>
+    {% for role in roles %}
+      {% if role['role_type'] == role_type %}
+      <li> {{ role['role_name'] }}</li>
+      {% endif %}
     
-{% endfor %}
-</ul>
+    {% endfor %}
+    </ul>
+  {% endfor %}
 
 <p>Esittely:</p>
 
