@@ -60,8 +60,9 @@ def create_player():
     
     classes = []
     for entry in request.form.getlist("classes"):
-        parts = entry.split(":")
-        classes.append((parts[0],parts[1]))
+        if entry:
+            parts = entry.split(":")
+            classes.append((parts[0],parts[1]))
 
     if len(name) == 0:
         abort(403)
@@ -118,9 +119,10 @@ def update_player():
 
     classes = []
     for entry in request.form.getlist("classes"):
-        parts = entry.split(":")
-        classes.append((parts[0],parts[1]))
-
+        if entry:
+            parts = entry.split(":")
+            classes.append((parts[0],parts[1]))
+        
     for role in defence_positions:
         valid_roles(role)
 

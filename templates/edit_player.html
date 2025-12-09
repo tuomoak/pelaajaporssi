@@ -29,8 +29,11 @@
     <select name="classes" id="class{{ class }}">
       <option value="">(valitse)</option>
     {% for option in classes[class] %}
-      <option value="{{ class }}:{{ option }}"
-      {% if option in selected %}selected{% endif %}>{{ option }}</option>
+      {% if option in selected %}
+      <option value="{{ class }}:{{ option }}" selected>{{ option }}</option>
+      {% else %}
+      <option value="{{ class }}:{{ option }}">{{ option }}</option>
+      {% endif %}
     {% endfor %}
     </select>
   </p>
