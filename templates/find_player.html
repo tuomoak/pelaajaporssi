@@ -54,9 +54,8 @@
   
   <ul>
     {% for player in results %}
-    <li> <a href="/player/{{ player.id }}" >{{ player.name }}</a>  </li>
-
-    {% else %}
+    <li> <a href="/player/{{ player.id }}" >{{ player.name }}</a>   {{ player[2] if player[2] is not none else '' }} </li>
+  {% else %}
         <li>Tuloksia ei löytynyt.</li>
     {% endfor %}
   </ul>

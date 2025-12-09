@@ -21,9 +21,11 @@ def get_user(user_id):
 def get_players(user_id):
 
     sql = """
-        SELECT id, name FROM players WHERE user_id = ?
+        SELECT players.id, players.name, player_classes.value
+        FROM players 
+        LEFT JOIN player_classes ON player_classes.player_id = players.id
+        WHERE user_id = ?
           """
-    
     return db.query(sql,[user_id])
 
 def create_user(username, password1):

@@ -33,7 +33,7 @@
 
 <ul>
 {% for player in players%}
-   <li> <a href="/player/{{ player.id }}" >{{ player.name }}</a>  </li>
+   <li> <a href="/player/{{ player.id }}" >{{ player.name }}</a>   {{ player[2] if player[2] is not none else '' }} </li>
 
 {% else %}
   <li>Ei lisättyjä pelaajia.</li>

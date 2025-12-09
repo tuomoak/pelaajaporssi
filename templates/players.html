@@ -21,9 +21,9 @@
   <ul>
   {% for player in all_players %}
   <p>
-  <li> <a href="/player/{{ player.id }}" >{{ player.name }}</a>  </li>
+  <li> <a href="/player/{{ player.id }}" >{{ player.name }}</a>  {{ player[2] if player[2] is not none else '' }} </li>
   </p>
-  <hr />
+
   {% endfor %}
   </ul>
 

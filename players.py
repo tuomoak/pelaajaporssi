@@ -53,7 +53,11 @@ def add_player(name, profile, user_id, classes, roles):
     return last_id
 
 def get_players():
-    sql = "SELECT name, id FROM players ORDER BY id DESC"
+    sql = """
+        SELECT players.id, players.name, player_classes.value 
+        FROM players 
+        LEFT JOIN player_classes ON player_classes.player_id = players.id
+        ORDER BY players.id DESC"""
     
     return db.query(sql)
 
@@ -150,7 +154,11 @@ def remove_player(player_id):
 def find_players(query):
 
     sql = """
-        SELECT id, name FROM players WHERE name LIKE ? or profile like ?
-          """
+        SELECT players.id, players.name, player_classes.value
+        FROM players 
+
+        LEFT JOIN player_classes ON player_classes.player_id = players.id
+        WHERE name LIKE ? or profile like ?
+        """
     like = "%" + query + "%"
     return db.query(sql,[like, like])

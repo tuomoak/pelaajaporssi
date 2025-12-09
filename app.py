@@ -111,7 +111,7 @@ def edit_player(player_id):
         all_roles = players.get_all_roles()
         player_roles = players.get_roles(player_id)
 
-        ### collecs info which already selected
+        ### collects selected info
         selected = set()
         if player_classes:
             for entry in player_classes:
