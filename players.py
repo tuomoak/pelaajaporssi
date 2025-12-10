@@ -24,6 +24,30 @@ def get_all_roles():
 
     return roles
 
+def get_all_ideas():
+    sql = "SELECT title, value FROM ideas ORDER BY id"
+    result = db.query(sql)
+
+    ideas = {}
+    for title, value in result:
+        ideas[title] = []
+    for title, value in result:
+        ideas[title].append(value)
+
+    return ideas
+
+def get_all_contacts():
+    sql = "SELECT title, value FROM contacts ORDER BY id"
+    result = db.query(sql)
+
+    contacts = {}
+    for title, value in result:
+        contacts[title] = []
+    for title, value in result:
+        contacts[title].append(value)
+
+    return contacts
+
 def add_player(name, profile, user_id, classes, roles):
         
     columns = "NAME, PROFILE, user_id"
@@ -63,6 +87,13 @@ def get_players():
 
 def get_classes(player_id):
     sql = "SELECT title, value FROM player_classes WHERE player_id = ?;"
+    return db.query(sql, [player_id])
+
+def get_ideas(player_id):
+    sql = """SELECT pi.id AS id, pi.title AS title, pi.value AS value, pi.user_id AS user_id, pi.contact_type AS contact_type, users.username AS username
+             FROM player_ideas AS pi
+             LEFT JOIN users ON users.id = pi.user_id
+            WHERE player_id = ?;"""
 
     return db.query(sql, [player_id])
 
@@ -147,10 +178,23 @@ def remove_player(player_id):
     sql = "DELETE FROM player_roles WHERE player_id = ?"
     db.execute(sql, [player_id])
 
+    ###remove ideas
+    sql = "DELETE FROM player_ideas WHERE player_id = ?"
+    db.execute(sql, [player_id])
+
     ### remove player
     sql = "DELETE FROM players WHERE id = ?"
     db.execute(sql, [player_id])
 
+def suggest_idea(player_id, ideas, contacts, user_id):
+
+    for title, value in contacts:
+        contact_type = value
+
+    for title, value in ideas:
+        sql = "INSERT INTO player_ideas (player_id, title, value, contact_type, user_id) VALUES (?, ?, ?, ?,?);"
+        db.execute(sql,[player_id, title, value, contact_type, user_id])
+    
 def find_players(query):
 
     sql = """

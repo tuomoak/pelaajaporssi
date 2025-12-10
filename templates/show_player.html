@@ -16,8 +16,7 @@
 {% endfor %}
 
 <p>
-  <b>{{player.name}}</b>
-  <p>Lisännyt: <a href="/user/{{ player.user_id }}"> {{ user.username }} </a></p>
+  <b>{{player.name}}</b> Lisännyt: <a href="/user/{{ player.user_id }}"> {{ user.username }} </a>
 </p>
 
 {% if session.user_id == player.user_id %}
@@ -38,7 +37,7 @@
 
 
 {% for role_type in all_roles %}
-  <p>Mahdolliset {{ role_type }}:</p>
+  Mahdolliset {{ role_type }}:
     <ul>
     {% for role in roles %}
       {% if role['role_type'] == role_type %}
@@ -53,6 +52,53 @@
 
 {{ player.profile}}
 
+<form action="/suggest_idea" method="post">
+
+<p><b>Ehdotus pelaajalle</b></p>
+
+{% for contact in contacts %}
+  
+    {{ contact }}:
+    <select name="contact" id="contact{{ contact }}">
+      <option value="">(valitse)</option>
+    {% for option in contacts[contact] %}
+      <option value="{{ contact }}:{{ option }}">{{ option }}</option>
+    {% endfor %}
+    </select>
+  
+    {% endfor %}
+
+{% for idea in ideas %}
+  
+    {{ idea }}:
+    <select name="ideas" id="idea{{ idea }}">
+      <option value="">(valitse)</option>
+    {% for option in ideas[idea] %}
+      <option value="{{ idea }}:{{ option }}">{{ option }}</option>
+    {% endfor %}
+    </select>
+  
+    {% endfor %}
+
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+  <input type="hidden" name="player_id" value="{{ player.id }}" />
+  <input type="submit" value="Ehdota" />
+ 
+ </form>
+
+ <p></p>
+
+ {% if player_ideas %}
+
+{% for idea in player_ideas %}
+  <li>Ehdotus käyttäjältä <a href="/user/{{ idea.user_id }}"> {{ idea.username }} </a> : {{ idea.contact_type}} => {{idea.value}}<li>
+   {% endfor %}
+   {% else %}
+   <li>Ei ehdotuksia</li>
+  {% endif %}
+
+
 </body>
 
 </html>
+

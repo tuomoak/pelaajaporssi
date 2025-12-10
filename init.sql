@@ -15,3 +15,11 @@ INSERT INTO roles (title, value) VALUES('sisäpeliroolit','Vaihtaja');
 INSERT INTO roles (title, value) VALUES('sisäpeliroolit','Kotiuttaja');
 INSERT INTO roles (title, value) VALUES('sisäpeliroolit','Kopittaja');
 INSERT INTO roles (title, value) VALUES('sisäpeliroolit','Jokeri');
+
+INSERT INTO ideas (title, value) VALUES('Ehdotus','Treenataan');
+INSERT INTO ideas (title, value) VALUES('Ehdotus','Pelataan');
+INSERT INTO ideas (title, value) VALUES('Ehdotus','Voisi huilata');
+
+INSERT INTO contacts (title, value) VALUES('Kontakti','Soita');
+INSERT INTO contacts (title, value) VALUES('Kontakti','Laita viestiä');
+INSERT INTO contacts (title, value) VALUES('Kontakti','Ajattelen vain');

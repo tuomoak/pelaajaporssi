@@ -19,22 +19,40 @@ def require_login():
     if "user_id" not in session:
         abort(403)
 
-def valid_roles(roletype, role):
+def valid_roles(type, role):
 
     valid_roles = players.get_all_roles()
 
-    if roletype not in valid_roles:
+    if type not in valid_roles:
         abort(403)
-    if role not in valid_roles[roletype]:
+    if role not in valid_roles[type]:
         abort(403)
 
-def valid_class(classtype, value):
+def valid_class(type, value):
 
     valid_classes = players.get_all_classes()
     
-    if classtype not in valid_classes:
+    if type not in valid_classes:
         abort(403)
-    if value not in valid_classes[classtype]:
+    if value not in valid_classes[type]:
+        abort(403)
+
+def valid_ideas(type, value):
+
+    valid_ideas = players.get_all_ideas()
+
+    if type not in valid_ideas:
+        abort(403)
+    if value not in valid_ideas[type]:
+        abort(403)
+
+def valid_contacts(type, value):
+
+    valid_contacts = players.get_all_contacts()
+
+    if type not in valid_contacts:
+        abort(403)
+    if value not in valid_contacts[type]:
         abort(403)
 
 @app.route("/add_player")
@@ -167,6 +185,46 @@ def update_player():
 
     return redirect("/player/" + str(player_id))
 
+@app.route("/suggest_idea", methods=["POST"])
+def suggest_idea():
+    require_login()
+    check_csrf()
+    player_id = request.form["player_id"]
+    ideas = request.form["ideas"]
+    user_id = session['user_id']
+
+    max_limit = 3
+
+
+    if len(users.get_player_ideas(user_id, player_id)) >= max_limit:
+        flash(f'Sama käyttäjä voi lähettää pelaajalle vain {max_limit} ehdotusta.')
+        return redirect("/player/" + str(player_id))
+
+    ideas = []
+    for entry in request.form.getlist("ideas"):
+        if entry:
+            parts = entry.split(":")
+
+            ### checks is input valid
+            valid_ideas(parts[0], parts[1])
+
+            ideas.append((parts[0],parts[1]))
+
+    contacts = []
+    for entry in request.form.getlist("contact"):
+        if entry:
+            parts = entry.split(":")
+
+            ### checks is input valid
+            valid_contacts(parts[0], parts[1])
+
+            contacts.append((parts[0],parts[1]))
+
+    players.suggest_idea(player_id, ideas, contacts, user_id)
+    flash("Pelaajalle lähetty idea")
+
+    return redirect("/player/" + str(player_id))
+
 @app.route("/remove_player/<int:player_id>", methods=["GET", "POST"])
 def remove_player(player_id):
     require_login()
@@ -214,7 +272,11 @@ def player(player_id):
     else:
         classes = players.get_classes(player_id)
         all_roles = players.get_all_roles()
-        return render_template("/show_player.html", player=player[0], user = player[1], classes = classes, roles=player[2], all_roles = all_roles)
+        ideas = players.get_all_ideas()
+        contacts = players.get_all_contacts()
+        player_ideas = players.get_ideas(player_id)
+
+        return render_template("/show_player.html", player=player[0], user = player[1], classes = classes, roles=player[2], all_roles = all_roles, ideas=ideas, player_ideas = player_ideas, contacts=contacts)
 
 @app.route("/user/<int:user_id>")
 def user(user_id):

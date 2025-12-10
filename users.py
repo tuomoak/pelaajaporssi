@@ -28,11 +28,19 @@ def get_players(user_id):
           """
     return db.query(sql,[user_id])
 
+def get_player_ideas(user_id, player_id):
+
+    sql = """
+        SELECT title, value
+        FROM player_ideas
+        WHERE user_id = ? AND player_id = ?
+          """
+    return db.query(sql,[user_id, player_id])
+
 def create_user(username, password1):
      password_hash = generate_password_hash(password1)
      sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
      db.execute(sql, [username, password_hash])
-
 
 def check_login(username, password):
         sql = "SELECT id, password_hash FROM users WHERE username = ?"
