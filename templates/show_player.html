@@ -92,7 +92,7 @@
  {% if player_ideas %}
 
 {% for idea in player_ideas %}
-  <li>Ehdotus käyttäjältä <a href="/user/{{ idea.user_id }}"> {{ idea.username }} </a> : {{ idea.contact_type}} => {{idea.value}}<li>
+  <li>Ehdotus käyttäjältä <a href="/user/{{ idea.user_id }}"> {{ idea.username }} </a> : {{ idea.contact_type}} => {{idea.value}}</li>
    {% endfor %}
    {% else %}
    <li>Ei ehdotuksia</li>

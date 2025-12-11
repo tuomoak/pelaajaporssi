@@ -49,18 +49,16 @@ def get_all_contacts():
     return contacts
 
 def add_player(name, profile, user_id, classes, roles):
-        
-    columns = "NAME, PROFILE, user_id"
-    column_places = "?,?,?"
+    sql = "INSERT INTO players (NAME, PROFILE, user_id) VALUES (?, ?, ?);"
     values = [name, profile,user_id]
-    db.execute(f"INSERT INTO players ({columns}) VALUES ({column_places})",values)
-    
+    db.execute(sql,[name, profile, user_id])
+
     ### If first player, goes to except
     try:
         last_id = int(db.last_insert_id())
     except:
         last_id = 0
-            
+
     ### classes
     for title, value in classes:
         sql = "INSERT INTO player_classes (player_id, title, value) VALUES (?, ?, ?);"
@@ -194,7 +192,7 @@ def suggest_idea(player_id, ideas, contacts, user_id):
     for title, value in ideas:
         sql = "INSERT INTO player_ideas (player_id, title, value, contact_type, user_id) VALUES (?, ?, ?, ?,?);"
         db.execute(sql,[player_id, title, value, contact_type, user_id])
-    
+
 def find_players(query):
 
     sql = """
