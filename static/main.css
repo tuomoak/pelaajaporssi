@@ -1,0 +1,13 @@
+body {
+  margin: auto;
+  max-width: 50em;
+  font-family: sans-serif;
+  background-color: lightblue;
+}
+
+
+.inline-form {
+            display: inline-block; /* Aseta lomake inline-blockiksi */
+            margin-left: 10px; /* Lisää marginaalia tarvittaessa */
+            vertical-align: middle; /* Varmistaa, että lomake on keskitetty pystysuunnassa */
+           }  

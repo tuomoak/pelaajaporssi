@@ -2,6 +2,7 @@
 <html>
 
 <head>
+  <link rel="stylesheet" href="/static/main.css">
   <title>Pelaajan lisäys</title>
 </head>
 
@@ -24,7 +25,7 @@
       <input type="text" name="name" id="name" value="{{name}}" maxlength="50" required>
     </p>
 
-    {% for class in classes %}
+  {% for class in classes %}
   <p>
     {{ class }}:
     <select name="classes" id="class{{ class }}">

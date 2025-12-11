@@ -2,6 +2,7 @@
 <html>
 
 <head>
+  <link rel="stylesheet" href="/static/main.css">
   <title>Pelaajapörssi</title>
 </head>
 
@@ -13,29 +14,26 @@
   </p>
 {% endfor %}
 
-{% if session.username %}
+{% if session.user_id %}
   <p>
-    Olet kirjautunut nimellä <a href="/user/{{ session.user_id }}"> {{ session.username }} </a>
-    
+    Kirjautunut: <a href="/user/{{ session.user_id }}"> {{ session.username }} </a> | <a href="/logout">Kirjaudu ulos</a>
   </p>
-  <p>
-    <a href="/logout">Kirjaudu ulos</a>
+  </p>  <a href="/players">Pelaajat</a>
+        <a href="/add_player">Lisää pelaaja</a> |
+        <a href="/find_player">Etsi pelaajia</a> |
+        Tulossa: <a href="/teams">Joukkueet</a>
   </p>
   {% else %}
-  <form action="/login" method="post">
-    <p>
-      Tunnus: <br />
-      <input type="text" name="username" />
-    </p>
-    <p>
-      Salasana: <br />
-      <input type="password" name="password" />
-    </p>
-    <input type="submit" value="Kirjaudu" />
-  </form>
-
-  <p><a href="/register">Rekisteröi tunnus</a></p>
-  
+  <p>
+     <form action="/login" method="post">
+        Tunnus: <input type="text" name="username" /> 
+        Salasana: <input type="password" name="password" />
+        <input type="submit" value="Kirjaudu" />
+      </form>
+   </p>
+   <p>
+      <a href="/register">Luo tunnus</a>
+   </p>
   {% endif %}
 
   <h1>Pelaajapörssi - Pesisjoukkuetta tai -pelaajaa vailla?</h1>
@@ -45,21 +43,6 @@
     <li>{{ item }}</li>
     {% endfor %}
   </ul>
-
-{% if session.username %}
-
-<p><a href="/add_player">Haluatko lisätä pelaajan?</a></p>
-
-<p><a href="/players">Palvelussa olevat pelaajat</a></p>
-
-<p><a href="/find_player">Etsi pelaajia</a></p>
-
-<p><b>Tuleva ominaisuus:</b></p>
-
-<p><a href="/teams">Palvelussa olevat joukkueet</a></p>
-
-  {% else %}
-  {% endif %}
 
 </body>
 
