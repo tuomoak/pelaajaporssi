@@ -19,40 +19,24 @@ def require_login():
     if "user_id" not in session:
         abort(403)
 
-def valid_roles(type, role):
+def valid_input(input_type, form_input, value):
 
-    valid_roles = players.get_all_roles()
+    valid_dict = {}
 
-    if type not in valid_roles:
+    ### get valid inputs
+    if input_type == "roles":
+        valid_dict = players.get_all_roles()
+    if input_type == "classes":
+        valid_dict = players.get_all_classes()
+    if input_type == "ideas":
+        valid_dict = players.get_all_ideas()
+    if input_type == "contacts":
+        valid_dict = players.get_all_contacts()
+
+    ### check is inputs in valid_dict
+    if form_input not in valid_dict:
         abort(403)
-    if role not in valid_roles[type]:
-        abort(403)
-
-def valid_class(type, value):
-
-    valid_classes = players.get_all_classes()
-    
-    if type not in valid_classes:
-        abort(403)
-    if value not in valid_classes[type]:
-        abort(403)
-
-def valid_ideas(type, value):
-
-    valid_ideas = players.get_all_ideas()
-
-    if type not in valid_ideas:
-        abort(403)
-    if value not in valid_ideas[type]:
-        abort(403)
-
-def valid_contacts(type, value):
-
-    valid_contacts = players.get_all_contacts()
-
-    if type not in valid_contacts:
-        abort(403)
-    if value not in valid_contacts[type]:
+    if value not in valid_dict[form_input]:
         abort(403)
 
 @app.route("/add_player")
@@ -83,29 +67,30 @@ def create_player():
     name = request.form["name"]
     profile = request.form["profile"]
     user_id = session["user_id"]
-    
+
     classes = []
     for entry in request.form.getlist("classes"):
         if entry:
             parts = entry.split(":")
             classes.append((parts[0],parts[1]))
-            valid_class(parts[0], parts[1])
+
+            valid_input("classes", parts[0], parts[1])
 
     roles = []
     for entry in request.form.getlist("roles"):
         if entry:
             parts = entry.split(":")
             roles.append((parts[0],parts[1]))
-            
+
             ### checks is input valid
-            valid_roles(parts[0], parts[1])
+            valid_input("roles", parts[0], parts[1])
 
     if len(name) == 0:
         abort(403)
 
     if len(name) > 50 or len(profile) > 300:
         abort(403)
-    
+
     player_id = players.add_player(name, profile, user_id, classes, roles)
     flash("Uusi pelaaja lisätty.")
 
@@ -125,7 +110,7 @@ def edit_player(player_id):
     else:
         all_classes = players.get_all_classes()
         player_classes = players.get_classes(player_id)
-        
+
         all_roles = players.get_all_roles()
         player_roles = players.get_roles(player_id)
 
@@ -134,7 +119,7 @@ def edit_player(player_id):
         if player_classes:
             for entry in player_classes:
                 selected.add(entry[1])
-        if player_roles: 
+        if player_roles:
             for role in player_roles:
                 selected.add(role[1])
 
@@ -155,7 +140,7 @@ def update_player():
         if entry:
             parts = entry.split(":")
             ### checks is input valid
-            valid_class(parts[0], parts[1])
+            valid_input("classes", parts[0], parts[1])
 
             classes.append((parts[0],parts[1]))
 
@@ -163,11 +148,11 @@ def update_player():
     for entry in request.form.getlist("roles"):
         if entry:
             parts = entry.split(":")
-            ### check if input valid
-            valid_roles(parts[0], parts[1])
+            ### checks is input valid
+            valid_input("roles", parts[0], parts[1])
 
             roles.append((parts[0],parts[1]))
-               
+
     if len(name) == 0:
         abort(403)
 
@@ -206,7 +191,7 @@ def suggest_idea():
             parts = entry.split(":")
 
             ### checks is input valid
-            valid_ideas(parts[0], parts[1])
+            valid_input("ideas", parts[0], parts[1])
 
             ideas.append((parts[0],parts[1]))
 
@@ -216,7 +201,7 @@ def suggest_idea():
             parts = entry.split(":")
 
             ### checks is input valid
-            valid_contacts(parts[0], parts[1])
+            valid_input("contacts", parts[0], parts[1])
 
             contacts.append((parts[0],parts[1]))
 

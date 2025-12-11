@@ -50,7 +50,6 @@ def get_all_contacts():
 
 def add_player(name, profile, user_id, classes, roles):
     sql = "INSERT INTO players (NAME, PROFILE, user_id) VALUES (?, ?, ?);"
-    values = [name, profile,user_id]
     db.execute(sql,[name, profile, user_id])
 
     ### If first player, goes to except
@@ -80,7 +79,7 @@ def get_players():
         FROM players 
         LEFT JOIN player_classes ON player_classes.player_id = players.id
         ORDER BY players.id DESC"""
-    
+
     return db.query(sql)
 
 def get_classes(player_id):
@@ -101,52 +100,48 @@ def get_roles(player_id):
     return db.query(sql, [player_id])
 
 def get_player(player_id):
-        
-        sql = """
-                SELECT id, name, profile, user_id
-                FROM players
-                WHERE id = ?;
-              """
-        ### if no player with player_id, goes to except
-        try:
-            player_info = db.query(sql, [player_id])[0]
-            user_id = player_info['user_id']
-        except:
-            player_info = None
 
-        #### USER INFO
-        sql = """
-                SELECT id, username
-                FROM users
-                WHERE id = ?;
-              """
-        
-        ### if no player with user_id, goes to except
-        try:
-            user_info = db.query(sql, [user_id])[0]
-        except:
-            user_info = None
-        
-        ### roles
-        sql = """
-                SELECT role_type, role_name
-                FROM player_roles
-                WHERE player_id = ? AND role_value = 1;
-              """
-        
-        roles = db.query(sql, [player_id])
+    sql = """
+            SELECT id, name, profile, user_id
+            FROM players
+            WHERE id = ?;
+            """
+    ### if no player with player_id, goes to except
+    try:
+        player_info = db.query(sql, [player_id])[0]
+        user_id = player_info['user_id']
+    except:
+        player_info = None
 
-        ### result
-        result = player_info, user_info, roles
+    #### USER INFO
+    sql = "SELECT id, username FROM users WHERE id = ?;"
 
-        return result if result else None
+    ### if no player with user_id, goes to except
+    try:
+        user_info = db.query(sql, [user_id])[0]
+    except:
+        user_info = None
+
+    ### roles
+    sql = """
+            SELECT role_type, role_name
+            FROM player_roles
+            WHERE player_id = ? AND role_value = 1;
+            """
+
+    roles = db.query(sql, [player_id])
+
+    ### result
+    result = player_info, user_info, roles
+
+    return result if result else None
 
 def update_player(player_id, name, profile, classes, roles):
 
     sql = """UPDATE players SET name = ?,
                                 profile = ?
                                 WHERE id = ?"""
-    
+
     db.execute(sql, [name, profile, player_id])
 
     ### remove old classes
@@ -164,10 +159,10 @@ def update_player(player_id, name, profile, classes, roles):
 
     ### update roles
     for role_type, role_name in roles:
-       sql = """INSERT INTO player_roles (player_id, role_type, role_name, role_value)
+        sql = """INSERT INTO player_roles (player_id, role_type, role_name, role_value)
                 VALUES (?, ?, ?, 1);"""
-       db.execute(sql,[player_id, role_type, role_name])
-        
+        db.execute(sql,[player_id, role_type, role_name])
+
 def remove_player(player_id):
     ### remove classes and role
     sql = "DELETE FROM player_classes WHERE player_id = ?"

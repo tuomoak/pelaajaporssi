@@ -1,22 +1,18 @@
-import db
 from werkzeug.security import generate_password_hash, check_password_hash
+import db
 
 def get_user(user_id):
-        
-        sql = """
-                SELECT id, username
-                FROM users
-                WHERE id = ?;
-              """
 
-        try:
-            user_info = db.query(sql, [user_id])[0]
-        except:
-            user_info = None
-        
-        result = user_info
+    sql = "SELECT id, username FROM users WHERE id = ?;"
 
-        return result if result else None
+    try:
+        user_info = db.query(sql, [user_id])[0]
+    except:
+        user_info = None
+
+    result = user_info
+
+    return result if result else None
 
 def get_players(user_id):
 
@@ -38,20 +34,20 @@ def get_player_ideas(user_id, player_id):
     return db.query(sql,[user_id, player_id])
 
 def create_user(username, password1):
-     password_hash = generate_password_hash(password1)
-     sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
-     db.execute(sql, [username, password_hash])
+    password_hash = generate_password_hash(password1)
+    sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
+    db.execute(sql, [username, password_hash])
 
 def check_login(username, password):
-        sql = "SELECT id, password_hash FROM users WHERE username = ?"
-        result = db.query(sql, [username])
-        if not result:
-            return None
+    sql = "SELECT id, password_hash FROM users WHERE username = ?"
+    result = db.query(sql, [username])
+    if not result:
+        return None
 
-        user_id = result[0]["id"]
-        password_hash = result[0]["password_hash"]
+    user_id = result[0]["id"]
+    password_hash = result[0]["password_hash"]
 
-        if check_password_hash(password_hash, password):
-            return user_id
-        else:
-            return None
+    if check_password_hash(password_hash, password):
+        return user_id
+    else:
+        return None
