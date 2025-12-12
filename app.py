@@ -178,8 +178,8 @@ def suggest_idea():
     ideas = request.form["ideas"]
     user_id = session['user_id']
 
+    ### max for ideas player/user
     max_limit = 3
-
 
     if len(users.get_player_ideas(user_id, player_id)) >= max_limit:
         flash(f'Sama käyttäjä voi lähettää pelaajalle vain {max_limit} ehdotusta.')
@@ -233,7 +233,7 @@ def remove_player(player_id):
             return redirect("/")
         else:
             return redirect("/player/" + str(player_id))
-        
+
 @app.route("/remove_idea/<int:idea_id>", methods=["POST"])
 def remove_idea(idea_id):
     require_login()
@@ -243,7 +243,7 @@ def remove_idea(idea_id):
 
     if idea[0]['user_id'] != session['user_id']:
         abort(403)
-  
+
     if request.method == "POST":
         check_csrf()
         if "remove" in request.form:
@@ -255,7 +255,7 @@ def remove_idea(idea_id):
 
 @app.route("/teams")
 def teams():
-    return "Tähän tulee palvelussa olevat joukkueet."
+    return render_template("/teams.html")
 
 @app.route("/players")
 def show_players():
@@ -300,7 +300,7 @@ def team(page_id):
 
 @app.route("/register")
 def register():
-    return render_template("register.html")
+    return render_template("register_user.html")
 
 @app.route("/register_user", methods=["POST"])
 def register_user():
