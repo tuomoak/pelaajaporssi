@@ -86,7 +86,7 @@ def get_classes(player_id):
     sql = "SELECT title, value FROM player_classes WHERE player_id = ?;"
     return db.query(sql, [player_id])
 
-def get_ideas(player_id):
+def get_player_ideas(player_id):
     sql = """SELECT pi.id AS id, pi.title AS title, pi.value AS value, pi.user_id AS user_id, pi.contact_type AS contact_type, users.username AS username
              FROM player_ideas AS pi
              LEFT JOIN users ON users.id = pi.user_id
@@ -94,6 +94,18 @@ def get_ideas(player_id):
 
     return db.query(sql, [player_id])
 
+def get_idea(idea_id):
+    sql = """SELECT pi.id AS id, pi.title AS title, pi.value AS value, pi.user_id AS user_id, pi.contact_type AS contact_type, users.username AS username
+             FROM player_ideas AS pi
+             LEFT JOIN users ON users.id = pi.user_id
+            WHERE pi.id = ?;"""
+    
+    return db.query(sql, [idea_id])
+
+def remove_idea(idea_id):
+    sql = "DELETE FROM player_ideas WHERE id = ?"
+    db.execute(sql, [idea_id])
+    
 def get_roles(player_id):
     sql = "SELECT role_type, role_name FROM player_roles WHERE player_id = ?;"
 

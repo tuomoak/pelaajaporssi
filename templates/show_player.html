@@ -92,14 +92,20 @@
  {% if player_ideas %}
 
 {% for idea in player_ideas %}
-  <li>Ehdotus käyttäjältä <a href="/user/{{ idea.user_id }}"> {{ idea.username }} </a> : {{ idea.contact_type}} => {{idea.value}}</li>
-   {% endfor %}
+  <li>Ehdotus käyttäjältä <a href="/user/{{ idea.user_id }}"> {{ idea.username }} </a> : {{ idea.contact_type}} => {{idea.value}}
+  {% if idea.user_id == session.user_id %}
+  <form action="/remove_idea/{{ idea.id }}" class="inline-form" method="post">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+    <input type="hidden" name="player_id" value="{{ player.id }}" />
+    <input type="submit" name="remove" value="Poista" />
+  </li>
+  {% endif %} 
+  
+  {% endfor %}
    {% else %}
    <li>Ei ehdotuksia</li>
   {% endif %}
 
-
 </body>
 
 </html>
-

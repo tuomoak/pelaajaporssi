@@ -233,6 +233,25 @@ def remove_player(player_id):
             return redirect("/")
         else:
             return redirect("/player/" + str(player_id))
+        
+@app.route("/remove_idea/<int:idea_id>", methods=["POST"])
+def remove_idea(idea_id):
+    require_login()
+    check_csrf()
+    player_id = request.form.get('player_id')
+    idea = players.get_idea(idea_id)
+
+    if idea[0]['user_id'] != session['user_id']:
+        abort(403)
+  
+    if request.method == "POST":
+        check_csrf()
+        if "remove" in request.form:
+            players.remove_idea(idea_id)
+            flash("Idea poistettu")
+            return redirect("/player/" + str(player_id))
+        else:
+            return redirect("/player/" + str(player_id))
 
 @app.route("/teams")
 def teams():
@@ -259,7 +278,7 @@ def player(player_id):
         all_roles = players.get_all_roles()
         ideas = players.get_all_ideas()
         contacts = players.get_all_contacts()
-        player_ideas = players.get_ideas(player_id)
+        player_ideas = players.get_player_ideas(player_id)
 
         return render_template("/show_player.html", player=player[0], user = player[1], classes = classes, roles=player[2], all_roles = all_roles, ideas=ideas, player_ideas = player_ideas, contacts=contacts)
 
