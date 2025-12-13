@@ -2,6 +2,8 @@
 
 Sovelluksen tarkoitus on auttaa siinä, että pelaajat löytäisivät itselleen joukkueen ja joukkueet löytäisivät itselleen täydennystä.
 
+Joukkueen lisääminen ei ole vielä mahdollista.
+
 Suunniteltuja ominaisuuksia:
 * Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen.
 * Käyttäjä pystyy lisäämään sovellukseen joko pelaajia tai joukkueita. Lisäksi käyttäjä pystyy muokkaamaan ja poistamaan lisäämänsä pelaajan tai joukkueen tietoja.
@@ -9,7 +11,7 @@ Suunniteltuja ominaisuuksia:
 * Käyttäjä pystyy etsimään pelaajia tai joukkueita hakusanalla tai muulla perusteella. Käyttäjä pystyy hakemaan sekä itse lisäämiään että muiden käyttäjien lisäämiä pelaajia tai joukkueita. Pelaaja- tai joukkuetiedon lisännyt voi myös valita, ettei tietoja näy hakutuloksissa.
 * Sovelluksessa on käyttäjäsivut, jotka näyttävät jokaisesta käyttäjästä tilastoja ja käyttäjän lisäämät pelaajat tai joukkueet.
 * Käyttäjä pystyy valitsemaan pelaajalle tai joukkueelle yhden tai useamman luokittelun. Mahdolliset luokat ovat tietokannassa.
-* Sovelluksessa on pelaaja- tai joukkuetiedon lisäksi kiinnostus- ja kysymyspainike, jolla joukkue tai pelaaja voi ilmaista kiinnostuksensa joukkueeseen tai pelaajaan.
+* Sovelluksessa on pelaaja- tai joukkuetiedon lisäksi ehdotustoiminto, jolla käyttäjä voi ehdottaa pelaajalle harjoittelua, pelaamista tai lepäämistä ja väylää yhteydenottoon.
 
 ---------------------
 Ohje sovelluksen testaajalle
@@ -17,7 +19,7 @@ Ohje sovelluksen testaajalle
 
 Sovelluksen käynnistys edellyttää:
 
-database.db-tiedosto schema.sql-tiedoston avulla
+database.db-tiedosto schema.sql-tiedoston avulla ja luokat init.sql-tiedostosta
 
 Linuxissa:
 
