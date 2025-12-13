@@ -5,9 +5,60 @@ body {
   background-color: lightblue;
 }
 
+.header {
+  background-color: grey;
+  color: black;
+  padding: 1em;
+  margin: 0.5em 0;
+}
+
+.nav {
+  background-color: lightgrey;
+  padding: 0.5em;
+  margin: 0.5em 0;
+}
+
+.content {
+  background-color: white;
+  padding: 1em;
+  margin: 0.5em 0;
+} 
+
+.info {
+  border: 2px solid black;
+  margin: 1em;
+  padding: 0.5em;
+  background-color: lightslategray;
+  color: white;
+}
 
 .inline-form {
-            display: inline-block; /* Aseta lomake inline-blockiksi */
-            margin-left: 10px; /* Lisää marginaalia tarvittaessa */
-            vertical-align: middle; /* Varmistaa, että lomake on keskitetty pystysuunnassa */
-           }  
+            display: inline-block;
+            margin-left: 10px;
+            vertical-align: middle;
+           }
+
+h1, h2 {
+  margin: 0;
+  text-align: center;
+}
+
+nav {
+  text-align: center;
+}
+
+nav ul {
+  padding: 0;
+  margin: 0;
+}
+
+nav li {
+  display: inline-block;
+  padding: 0 0.5em;
+  margin: 0;
+}
+
+nav li:not(:last-of-type) {
+  border-right: 1px solid black;
+  margin-left: -0.25em;
+}
