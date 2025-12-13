@@ -1,67 +1,22 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <link rel="stylesheet" href="/static/main.css">
-  <title>Pelaajapörssi</title>
-</head>
+{% block title %}Pelaajapörssi{% endblock %}
 
-<body>
-  <div class="header">
-    <h1>Pelaajapörssi</h1> 
-    <h2><small>Pesisjoukkuetta tai -pelaajaa vailla?</small></h2>
-  </div>
-  
-  <div class="nav">
-      <nav>
-      {% if session.user_id %}
-        <p>
-          <ul>
-            <li><a href="/players">Pelaajat</a></li>
-            <li><a href="/add_player">Lisää pelaaja</a></li>
-            <li><a href="/find_player">Etsi pelaajia</a></li>
-            <li>Tulossa: <a href="/teams">Joukkueet</a></li>
-            <li>Kirjautunut: <a href="/user/{{ session.user_id }}"> {{ session.username }} </a></li>
-            <li><a href="/logout">Kirjaudu ulos</a></li>
-          </ul>
-        </p>
-      
-      {% else %}
-        <p>
-          <ul>
-            <li>
-              <form action="/login" method="post">
-                  Tunnus: <input type="text" name="username" /> 
-                  Salasana: <input type="password" name="password" />
-                  <input type="submit" value="Kirjaudu" />
-              </form>
-            </li>
-            <li><a href="/register">Luo tunnus</a></li>
-          </ul>
-        </p>
-      </nav>
-      {% endif %}
-    
-  </div>
+{% block content %}
 
-  
-    {% for message in get_flashed_messages() %}
-      <p  class="info">
-        <b>{{ message }}</b>
-      </p>
-      </div>
-    {% endfor %}
-  
+<h2>Pesisjoukkuetta tai -pelaajaa vailla?</h2>
 
-  <div class="content">
-    <p>{{ message }}</p>
-    <ul>
-      {% for item in items %}
-      <li>{{ item }}</li>
-      {% endfor %}
-    </ul>
-  </div>
+{% for message in get_flashed_messages() %}
+  <p  class="info">
+    <b>{{ message }}</b>
+  </p>
+{% endfor %}
 
-</body>
+<p>{{ message }}</p>
+<ul>
+  {% for item in items %}
+  <li>{{ item }}</li>
+  {% endfor %}
+</ul>
 
-</html>
+{% endblock %}

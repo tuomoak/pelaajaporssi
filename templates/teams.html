@@ -1,16 +1,17 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <link rel="stylesheet" href="/static/main.css">
-  <title>Pelaajapörssi: palvelussa olevat joukkueet</title>
-</head>
+{% block title %}Pelaajapörssi - rekisteröityminen{% endblock %}
 
-<body>
-    <p><a href="/">Takaisin etusivulle</a></p>
+{% block content %}
 
-    <p>Tälle sivulle tulee joukkueiden haku. Joukkuetoimintoja ei vielä ole.</p>
+<h2>Palvelussa olevat joukkueet</h2>
 
- </body>
+{% for message in get_flashed_messages() %}
+  <p  class="info">
+    <b>{{ message }}</b>
+  </p>
+{% endfor %}
 
-</html>
+<p>Tälle sivulle tulee palvelussa olevat joukkueet. Joukkuetoimintoja ei vielä ole.</p>
+
+{% endblock %}

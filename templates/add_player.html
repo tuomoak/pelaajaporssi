@@ -1,33 +1,26 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <link rel="stylesheet" href="/static/main.css">
-  <title>Pelaajan lisäys</title>
-</head>
+{% block title %}Pelaajapörssi - pelaajan lisääminen{% endblock %}
 
-<body>
+{% block content %}
 
-  <p><a href="/">Takaisin etusivulle</a></p>
- 
-  <p><b>Uuden pelaajan lisääminen</b></p>
+<h2>Uuden pelaajan lisääminen</h2>
 
-  {% for message in get_flashed_messages() %}
-  <p>
+{% for message in get_flashed_messages() %}
+  <p  class="info">
     <b>{{ message }}</b>
   </p>
-  {% endfor %}
+{% endfor %}
+ 
+{% if session.user_id %}
 
-  {% if session.user_id %}
-
-  <form action="/create_player" method="post">
-    <p>Pelaajan nimi: <br />
-      <input type="text" name="name" id="name" value="{{name}}" maxlength="50" required>
-    </p>
+<form action="/create_player" method="post">
+  <p>Pelaajan nimi: <br/>
+    <input type="text" name="name" id="name" value="{{name}}" maxlength="50" required>
+  </p>
 
   {% for class in classes %}
-  <p>
-    {{ class }}:
+  <p>{{ class }}:
     <select name="classes" id="class{{ class }}">
       <option value="">(valitse)</option>
     {% for option in classes[class] %}
@@ -35,25 +28,23 @@
     {% endfor %}
     </select>
   </p>
-    {% endfor %}
-    
-    {% for role in roles %}
-    <p>Mahdolliset {{role}}:</p>
-      {% for option in roles[role] %}
-        <input type="checkbox" name="roles"value="{{role}}:{{option}}"/> {{ option }}
-      {% endfor %}
-    {% endfor %}
-      
-    <p>Vapaaehtoinen teksti tai esittely:<br />
-      <textarea name="profile" rows="3" cols="50" maxlength="300">{{profile}}</textarea>
-    </p>
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="submit" value="Lähetä" />
-  </form>
   
-  {% endif %}
-</body>
+  {% endfor %}
+    
+  {% for role in roles %}
+  <p>Mahdolliset {{role}}:</p>
+    {% for option in roles[role] %}
+      <input type="checkbox" name="roles"value="{{role}}:{{option}}"/> {{ option }}
+    {% endfor %}
+  {% endfor %}
+    
+  <p>Vapaaehtoinen teksti tai esittely:<br />
+    <textarea name="profile" rows="3" cols="50" maxlength="300">{{profile}}</textarea>
+  </p>
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+  <input type="submit" value="Lähetä" />
+</form>
 
+{% endif %}
 
-
-</html>
+{% endblock %}

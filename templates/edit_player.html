@@ -1,67 +1,60 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <link rel="stylesheet" href="/static/main.css">
-  <title>Pelaajan tietojen muokkaus</title>
-</head>
+{% block title %}Pelaajapörssi - tietojen muokkaus {{player.name}}{% endblock %}
 
-<body>
+{% block content %}
 
-  <p><a href="/">Takaisin etusivulle</a></p>
- 
-  <p><b>Pelaajan tietojen muokkaus</b></p>
+<h2>Tietojen muokkaus: {{player.name}}</h2>
 
-  {% for message in get_flashed_messages() %}
-  <p>
+{% for message in get_flashed_messages() %}
+  <p  class="info">
     <b>{{ message }}</b>
   </p>
+{% endfor %}
+
+
+{% if session.user_id %}
+
+<form action="/update_player" method="post">
+  <p>Pelaajan nimi: <br />
+    <input type="text" name="name" id="name" value="{{player.name}}" maxlength="50" required>
+    
+{% for class in classes %}
+<p>
+  {{ class }}:
+  <select name="classes" id="class{{ class }}">
+    <option value="">(valitse)</option>
+  {% for option in classes[class] %}
+    {% if option in selected %}
+    <option value="{{ class }}:{{ option }}" selected>{{ option }}</option>
+    {% else %}
+    <option value="{{ class }}:{{ option }}">{{ option }}</option>
+    {% endif %}
   {% endfor %}
+  </select>
+</p>
+  {% endfor %}
+    
 
-  {% if session.user_id %}
-
-  <form action="/update_player" method="post">
-    <p>Pelaajan nimi: <br />
-      <input type="text" name="name" id="name" value="{{player.name}}" maxlength="50" required>
-      
-  {% for class in classes %}
-  <p>
-    {{ class }}:
-    <select name="classes" id="class{{ class }}">
-      <option value="">(valitse)</option>
-    {% for option in classes[class] %}
+{% for role in roles %}
+  <p>Mahdolliset {{role}}:</p>
+    {% for option in roles[role] %}
       {% if option in selected %}
-      <option value="{{ class }}:{{ option }}" selected>{{ option }}</option>
+      <input type="checkbox" name="roles"value="{{role}}:{{option}}" checked/> {{ option }}
       {% else %}
-      <option value="{{ class }}:{{ option }}">{{ option }}</option>
+      <input type="checkbox" name="roles"value="{{role}}:{{option}}"/> {{ option }}
       {% endif %}
+
     {% endfor %}
-    </select>
-  </p>
-    {% endfor %}
+  {% endfor %}
       
+  <p>Vapaaehtoinen teksti tai esittely:<br/>
+    <textarea name="profile" rows="3" cols="50" maxlength="300">{{player.profile}}</textarea>
+  </p>
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+  <input type="hidden" name="player_id" value="{{ player.id }}" />
+  <input type="submit" value="Muokkaa pelaajaa" />
+</form>
+{% endif %}
 
-  {% for role in roles %}
-    <p>Mahdolliset {{role}}:</p>
-      {% for option in roles[role] %}
-        {% if option in selected %}
-        <input type="checkbox" name="roles"value="{{role}}:{{option}}" checked/> {{ option }}
-        {% else %}
-        <input type="checkbox" name="roles"value="{{role}}:{{option}}"/> {{ option }}
-        {% endif %}
-
-      {% endfor %}
-    {% endfor %}
-        
-    <p>Vapaaehtoinen teksti tai esittely:<br />
-      <textarea name="profile" rows="3" cols="50" maxlength="300">{{player.profile}}</textarea>
-    </p>
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="hidden" name="player_id" value="{{ player.id }}" />
-    <input type="submit" value="Muokkaa pelaajaa" />
-  </form>
-  
-  {% endif %}
-</body>
-
-</html>
+{% endblock %}

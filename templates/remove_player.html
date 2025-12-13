@@ -1,38 +1,30 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <link rel="stylesheet" href="/static/main.css">
-  <title>Pelaajan poisto</title>
-</head>
+{% block title %}Pelaajapörssi - pelaajan poisto {{player.name}}{% endblock %}
 
-<body>
+{% block content %}
 
-  <p><a href="/">Takaisin etusivulle</a></p>
- 
-  <p><b>Pelaajan poistaminen</b></p>
+<h2>Pelaajan poistaminen</h2>
 
-  {% for message in get_flashed_messages() %}
-  <p>
+{% for message in get_flashed_messages() %}
+  <p  class="info">
     <b>{{ message }}</b>
   </p>
-  {% endfor %}
+{% endfor %}
 
-  {% if session.user_id %}
+{% if session.user_id %}
 
-  <form action="/remove_player/{{player.id}}" method="post">
+<form action="/remove_player/{{player.id}}" method="post">
 
-    <p> Pelaaja: {{player.name}}</p>
-    <p> Haluatko varmasti poistaa tämän pelaajan?</p>
-   
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    
-    <input type="submit" name="back" value="Palaa takaisin" />
-    <input type="submit" name="remove" value="Poista pelaaja" />
-    
-  </form>
+  <p> Pelaaja: {{player.name}}</p>
+  <p> Haluatko varmasti poistaa tämän pelaajan?</p>
   
-  {% endif %}
-</body>
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+  <input type="submit" name="back" value="Palaa takaisin" />
+  <input type="submit" name="remove" value="Poista pelaaja" />
+  
+</form>
 
-</html>
+{% endif %}
+
+{% endblock %}

@@ -1,32 +1,28 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <link rel="stylesheet" href="/static/main.css">
-  <title>Käyttäjän {{user.username}} tiedot</title>
-</head>
+{% block title %}Pelaajapörssi - Käyttäjätiedot{% endblock %}
 
-<body>
-    
-  <p><a href="/">Takaisin etusivulle</a> <a href="/players">Palvelussa olevat pelaajat</a> <a href="/teams">Palvelussa olevat joukkueet</a></p>
+{% block content %}
+
+{% if session.user_id == user.id %}
+<H2> Sinun käyttäjäsivusi</H2>
+{% else %}
+<H2> Käyttäjä {{user.username}} </H2> 
+{% endif %}
 
 {% for message in get_flashed_messages() %}
-  <p>
+  <p  class="info">
     <b>{{ message }}</b>
   </p>
 {% endfor %}
 
-{% if session.user_id == user.id %}
-<H2> Sinun käyttäjäsivusi</H2> 
 <H3> Käyttäjänimi: {{user.username}} </H3>
 
+{% if session.user_id == user.id %}
 <p>Olet lisännyt yhteensä {{ players|length}} pelaajaa.</p>
-
 <b>Lisäämäsi pelaajat:</b>
 
 {% else %}
-<H2> Käyttäjä {{user.username}} </H2> 
-
 <p>Käyttäjä lisännyt yhteensä {{ players|length}} pelaajaa.</p>
 
 <b>Käyttäjän lisäämät pelaajat:</b>
@@ -42,6 +38,4 @@
 {% endfor %}
 </ul>
 
-</body>
-
-</html>
+{% endblock %}

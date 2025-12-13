@@ -8,22 +8,40 @@
 
 <body>
   <div class="header">
-    <h1>Keskustelu</h1>
+    <h1>Pelaajapörssi</h1>
   </div>
 
   <div class="nav">
-    <nav>
-      <ul>
-        <li><a href="/">Etusivu</a></li>
-        <li><a href="/search">Haku</a></li>
-        <li><a href="/register">Luo tunnus</a></li>
-        {% if session.user_id %}
-        <li><a href="/logout">Kirjaudu ulos</a></li>
-        {% else %}
-        <li><a href="/login">Kirjaudu sisään</a></li>
-        {% endif %}
-      </ul>
-    </nav>
+      <nav>
+      {% if session.user_id %}
+        <p>
+          <ul>
+            <li><a href="/">Etusivu</a></li>
+            <li><a href="/players">Pelaajat</a></li>
+            <li><a href="/add_player">Lisää pelaaja</a></li>
+            <li><a href="/find_player">Etsi pelaajia</a></li>
+            <li>Tulossa: <a href="/teams">Joukkueet</a></li>
+            <li>Kirjautunut: <a href="/user/{{ session.user_id }}"> {{ session.username }} </a></li>
+            <li><a href="/logout">Kirjaudu ulos</a></li>
+          </ul>
+        </p>
+      
+      {% else %}
+        <p>
+          <ul>
+            <li><a href="/">Etusivu</a></li>
+            <li>
+              <form action="/login" method="post">
+                  Tunnus: <input type="text" name="username" /> 
+                  Salasana: <input type="password" name="password" />
+                  <input type="submit" value="Kirjaudu" />
+              </form>
+            </li>
+            <li><a href="/register">Luo tunnus</a></li>
+          </ul>
+        </p>
+      </nav>
+      {% endif %}
   </div>
 
   <div class="content">

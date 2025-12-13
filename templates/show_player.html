@@ -1,29 +1,25 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <link rel="stylesheet" href="/static/main.css">
-  <title> {{player.name}}</title>
-</head>
+{% block title %}Pelaajapörssi - {{player.name}}{% endblock %}
 
-<body>
-    
-  <p><a href="/">Takaisin etusivulle</a> <a href="/players">Palvelussa olevat pelaajat</a> <a href="/teams">Palvelussa olevat joukkueet</a></p>
+{% block content %}
+
+<h2>Pelaaja: {{player.name}}</h2>
 
 {% for message in get_flashed_messages() %}
-  <p>
+  <p  class="info">
     <b>{{ message }}</b>
   </p>
 {% endfor %}
 
 <p>
-  <b>{{player.name}}</b> Lisännyt: <a href="/user/{{ player.user_id }}"> {{ user.username }} </a>
+  Lisännyt: <a href="/user/{{ player.user_id }}"> {{ user.username }} </a>
 </p>
 
 {% if session.user_id == player.user_id %}
 
 <p>
-  <a href="/edit_player/{{ player.id }}"> Muokkaa </a>
+  <a href="/edit_player/{{ player.id }}"> Muokkaa </a> |
   <a href="/remove_player/{{ player.id }}"> Poista </a>
 </p>
 
@@ -31,7 +27,7 @@
 <p>
 {% if classes %}
   {% for class in classes %}
-  <li>{{ class.title}}: {{ class.value }}</li>
+  {{ class.title}}: {{ class.value }}
   {% endfor %}
 {% endif %}
 </p>
@@ -106,6 +102,4 @@
    <li>Ei ehdotuksia</li>
   {% endif %}
 
-</body>
-
-</html>
+{% endblock %}
