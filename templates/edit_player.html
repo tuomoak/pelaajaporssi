@@ -16,7 +16,7 @@
 {% if session.user_id %}
 
 <form action="/update_player" method="post">
-  <p>Pelaajan nimi: <br />
+  <p>Pelaajan nimi:
     <input type="text" name="name" id="name" value="{{player.name}}" maxlength="50" required>
     
 {% for class in classes %}

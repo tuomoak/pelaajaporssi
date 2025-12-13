@@ -206,8 +206,6 @@ def suggest_idea():
             contacts.append((parts[0],parts[1]))
 
     players.suggest_idea(player_id, ideas, contacts, user_id)
-    flash("Pelaajalle lähetty idea")
-
     return redirect("/player/" + str(player_id))
 
 @app.route("/remove_player/<int:player_id>", methods=["GET", "POST"])
@@ -248,7 +246,6 @@ def remove_idea(idea_id):
         check_csrf()
         if "remove" in request.form:
             players.remove_idea(idea_id)
-            flash("Idea poistettu")
             return redirect("/player/" + str(player_id))
         else:
             return redirect("/player/" + str(player_id))

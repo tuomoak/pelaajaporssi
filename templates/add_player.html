@@ -15,7 +15,7 @@
 {% if session.user_id %}
 
 <form action="/create_player" method="post">
-  <p>Pelaajan nimi: <br/>
+  <p>Pelaajan nimi:
     <input type="text" name="name" id="name" value="{{name}}" maxlength="50" required>
   </p>
 
@@ -28,7 +28,6 @@
     {% endfor %}
     </select>
   </p>
-  
   {% endfor %}
     
   {% for role in roles %}
@@ -38,7 +37,7 @@
     {% endfor %}
   {% endfor %}
     
-  <p>Vapaaehtoinen teksti tai esittely:<br />
+  <p>Vapaaehtoinen teksti tai esittely:<br/>
     <textarea name="profile" rows="3" cols="50" maxlength="300">{{profile}}</textarea>
   </p>
   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
