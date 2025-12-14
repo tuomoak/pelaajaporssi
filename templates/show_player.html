@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 
-{% block title %}Pelaajapörssi - {{player.name}}{% endblock %}
+{% block title %}Pelaajapörssi - {{player[0].name}}{% endblock %}
 
 {% block content %}
 
-<h2>Pelaaja: {{player.name}}</h2>
+<h2>Pelaaja: {{player[0].name}}</h2>
 
 {% for message in get_flashed_messages() %}
   <p  class="info">
@@ -13,17 +13,14 @@
 {% endfor %}
 
 <p>
-  Lisännyt: <a href="/user/{{ player.user_id }}"> {{ user.username }} </a>
-</p>
+  Lisännyt: <a href="/user/{{ player[0].user_id }}"> {{ player[0].username }} </a> 
 
-{% if session.user_id == player.user_id %}
-
-<p>
-  <a href="/edit_player/{{ player.id }}"> Muokkaa </a> |
-  <a href="/remove_player/{{ player.id }}"> Poista </a>
-</p>
-
+{% if session.user_id == player[0].user_id %}
+ | <a href="/edit_player/{{ player[0].id }}"> Muokkaa </a> |
+  <a href="/remove_player/{{ player[0].id }}"> Poista </a>
 {% endif %}
+</p>
+
 <p>
 {% if classes %}
   {% for class in classes %}
@@ -32,13 +29,12 @@
 {% endif %}
 </p>
 
-
 {% for role_type in all_roles %}
   Mahdolliset {{ role_type }}:
     <ul>
-    {% for role in roles %}
-      {% if role['role_type'] == role_type %}
-      <li> {{ role['role_name'] }}</li>
+    {% for row in player %}
+      {% if row['role_type'] == role_type %}
+      <li> {{ row['role_name'] }}</li>
       {% endif %}
     
     {% endfor %}
@@ -47,7 +43,7 @@
 
 <p>Esittely:</p>
 
-{{ player.profile}}
+{{ player[0].profile}}
 
 <form action="/suggest_idea" method="post">
 
@@ -78,7 +74,7 @@
     {% endfor %}
 
   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-  <input type="hidden" name="player_id" value="{{ player.id }}" />
+  <input type="hidden" name="player_id" value="{{ player[0].id }}" />
   <input type="submit" value="Ehdota" />
  
  </form>
@@ -93,11 +89,11 @@
   {% if idea.user_id == session.user_id %}
   <form action="/remove_idea/{{ idea.id }}" class="inline-form" method="post">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="hidden" name="player_id" value="{{ player.id }}" />
+    <input type="hidden" name="player_id" value="{{ player[0].id }}" />
     <input type="submit" name="remove" value="Poista" />
   </li>
-  </ul>  
   {% endif %}
+  </ul>
   {% endfor %}
   
   {% else %}

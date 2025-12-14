@@ -101,29 +101,35 @@ def edit_player(player_id):
     require_login()
     player = players.get_player(player_id)
 
-    if not player[0]:
+    if not player:
         abort(404)
 
     if player[0]['user_id'] != session['user_id']:
         abort(403)
 
-    else:
-        all_classes = players.get_all_classes()
-        player_classes = players.get_classes(player_id)
+    classes = players.get_all_classes()
+    player_classes = players.get_classes(player_id)
 
-        all_roles = players.get_all_roles()
-        player_roles = players.get_roles(player_id)
+    roles = players.get_all_roles()
+    player_roles = players.get_roles(player_id)
 
-        ### collects selected info
-        selected = set()
-        if player_classes:
-            for entry in player_classes:
-                selected.add(entry[1])
-        if player_roles:
-            for role in player_roles:
-                selected.add(role[1])
+    ### collects selected info
+    selected = set()
+    if player_classes:
+        for entry in player_classes:
+            selected.add(entry[1])
+    if player_roles:
+        for role in player_roles:
+            selected.add(role[1])
 
-        return render_template("/edit_player.html", player=player[0], classes = all_classes, roles = all_roles, selected = selected)
+    context = {
+    "player": player,
+    "classes": classes,
+    "roles": roles,
+    "selected":selected
+    }
+
+    return render_template("/edit_player.html", **context)
 
 @app.route("/update_player", methods=["POST"])
 def update_player():
@@ -134,6 +140,19 @@ def update_player():
     profile = request.form["profile"]
 
     player = players.get_player(player_id)
+
+    if len(name) == 0:
+        abort(403)
+
+    if len(name) > 50 or len(profile) > 300:
+        abort(403)
+
+    if not player[0]:
+        abort(404)
+
+    if player[0]['user_id'] != session['user_id']:
+        abort(403)
+
 
     classes = []
     for entry in request.form.getlist("classes"):
@@ -153,17 +172,6 @@ def update_player():
 
             roles.append((parts[0],parts[1]))
 
-    if len(name) == 0:
-        abort(403)
-
-    if len(name) > 50 or len(profile) > 300:
-        abort(403)
-
-    if not player[0]:
-        abort(404)
-
-    if player[0]['user_id'] != session['user_id']:
-        abort(403)
 
     players.update_player(player_id, name, profile, classes, roles)
     flash("Pelaajan muokatut tiedot")
@@ -268,16 +276,16 @@ def player(player_id):
 
     player = players.get_player(player_id)
 
-    if not player[0]:
+    if not player:
         abort(404)
-    else:
-        classes = players.get_classes(player_id)
-        all_roles = players.get_all_roles()
-        ideas = players.get_all_ideas()
-        contacts = players.get_all_contacts()
-        player_ideas = players.get_player_ideas(player_id)
 
-        return render_template("/show_player.html", player=player[0], user = player[1], classes = classes, roles=player[2], all_roles = all_roles, ideas=ideas, player_ideas = player_ideas, contacts=contacts)
+    classes = players.get_classes(player_id)
+    all_roles = players.get_all_roles()
+    ideas = players.get_all_ideas()
+    contacts = players.get_all_contacts()
+    player_ideas = players.get_player_ideas(player_id)
+
+    return render_template("/show_player.html", **locals())
 
 @app.route("/user/<int:user_id>")
 def user(user_id):

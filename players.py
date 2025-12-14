@@ -87,25 +87,25 @@ def get_classes(player_id):
     return db.query(sql, [player_id])
 
 def get_player_ideas(player_id):
-    sql = """SELECT pi.id AS id, pi.title AS title, pi.value AS value, pi.user_id AS user_id, pi.contact_type AS contact_type, users.username AS username
+    sql = """SELECT pi.id, pi.title, pi.value, pi.user_id, pi.contact_type, u.username
              FROM player_ideas AS pi
-             LEFT JOIN users ON users.id = pi.user_id
+             LEFT JOIN users as u ON u.id = pi.user_id
             WHERE player_id = ?;"""
 
     return db.query(sql, [player_id])
 
 def get_idea(idea_id):
-    sql = """SELECT pi.id AS id, pi.title AS title, pi.value AS value, pi.user_id AS user_id, pi.contact_type AS contact_type, users.username AS username
+    sql = """SELECT pi.id, pi.title, pi.value, pi.user_id, pi.contact_type, u.username
              FROM player_ideas AS pi
-             LEFT JOIN users ON users.id = pi.user_id
+             LEFT JOIN users as u ON u.id = pi.user_id
             WHERE pi.id = ?;"""
-    
+
     return db.query(sql, [idea_id])
 
 def remove_idea(idea_id):
     sql = "DELETE FROM player_ideas WHERE id = ?"
     db.execute(sql, [idea_id])
-    
+
 def get_roles(player_id):
     sql = "SELECT role_type, role_name FROM player_roles WHERE player_id = ?;"
 
@@ -113,38 +113,20 @@ def get_roles(player_id):
 
 def get_player(player_id):
 
-    sql = """
-            SELECT id, name, profile, user_id
-            FROM players
-            WHERE id = ?;
-            """
+    sql = """SELECT pl.id, pl.name, pl.profile, pl.user_id, u.username, pr.role_name, pr.role_type
+            FROM players AS pl
+            LEFT JOIN users AS u ON u.id = pl.user_id
+            LEFT JOIN player_roles AS pr ON pr.player_id = pl.id AND pr.role_value = 1
+            WHERE pl.id = ? ;"""
+
     ### if no player with player_id, goes to except
     try:
-        player_info = db.query(sql, [player_id])[0]
-        user_id = player_info['user_id']
+        player_info = db.query(sql, [player_id])
+        #user_id = player_info['user_id']
     except:
         player_info = None
 
-    #### USER INFO
-    sql = "SELECT id, username FROM users WHERE id = ?;"
-
-    ### if no player with user_id, goes to except
-    try:
-        user_info = db.query(sql, [user_id])[0]
-    except:
-        user_info = None
-
-    ### roles
-    sql = """
-            SELECT role_type, role_name
-            FROM player_roles
-            WHERE player_id = ? AND role_value = 1;
-            """
-
-    roles = db.query(sql, [player_id])
-
-    ### result
-    result = player_info, user_info, roles
+    result = player_info
 
     return result if result else None
 
@@ -197,7 +179,9 @@ def suggest_idea(player_id, ideas, contacts, user_id):
         contact_type = value
 
     for title, value in ideas:
-        sql = "INSERT INTO player_ideas (player_id, title, value, contact_type, user_id) VALUES (?, ?, ?, ?,?);"
+        sql = """INSERT INTO player_ideas (player_id, title, value, contact_type, user_id)
+                VALUES (?, ?, ?, ?,?);
+                """
         db.execute(sql,[player_id, title, value, contact_type, user_id])
 
 def find_players(query):
@@ -205,7 +189,6 @@ def find_players(query):
     sql = """
         SELECT players.id, players.name, player_classes.value
         FROM players 
-
         LEFT JOIN player_classes ON player_classes.player_id = players.id
         WHERE name LIKE ? or profile like ?
         """
