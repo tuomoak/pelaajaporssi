@@ -50,7 +50,7 @@ def get_all_contacts():
 
 def add_player(name, profile, user_id, classes, roles):
     sql = "INSERT INTO players (NAME, PROFILE, user_id) VALUES (?, ?, ?);"
-    db.execute(sql,[name, profile, user_id])
+    db.execute(sql, [name, profile, user_id])
 
     ### If first player, goes to except
     try:
@@ -61,15 +61,15 @@ def add_player(name, profile, user_id, classes, roles):
     ### classes
     for title, value in classes:
         sql = "INSERT INTO player_classes (player_id, title, value) VALUES (?, ?, ?);"
-        db.execute(sql,[last_id, title, value])
+        db.execute(sql, [last_id, title, value])
 
     ### roles
     for role_type, role_name in roles:
         sql = """
-        INSERT INTO player_roles (player_id, role_type, role_name, role_value)
-        VALUES (?, ?, ?, 1);
-        """
-        db.execute(sql,[last_id, role_type, role_name])
+            INSERT INTO player_roles (player_id, role_type, role_name, role_value)
+            VALUES (?, ?, ?, 1);
+            """
+        db.execute(sql, [last_id, role_type, role_name])
 
     return last_id
 
@@ -95,9 +95,10 @@ def get_player_ideas(player_id):
     return db.query(sql, [player_id])
 
 def get_idea(idea_id):
-    sql = """SELECT pi.id, pi.title, pi.value, pi.user_id, pi.contact_type, u.username
-             FROM player_ideas AS pi
-             LEFT JOIN users as u ON u.id = pi.user_id
+    sql = """
+            SELECT pi.id, pi.title, pi.value, pi.user_id, pi.contact_type, u.username
+            FROM player_ideas AS pi
+            LEFT JOIN users as u ON u.id = pi.user_id
             WHERE pi.id = ?;"""
 
     return db.query(sql, [idea_id])
@@ -149,13 +150,13 @@ def update_player(player_id, name, profile, classes, roles):
     #### updates classes
     for title, value in classes:
         sql = "INSERT INTO player_classes (player_id, title, value) VALUES (?, ?, ?);"
-        db.execute(sql,[player_id, title, value])
+        db.execute(sql, [player_id, title, value])
 
     ### update roles
     for role_type, role_name in roles:
         sql = """INSERT INTO player_roles (player_id, role_type, role_name, role_value)
                 VALUES (?, ?, ?, 1);"""
-        db.execute(sql,[player_id, role_type, role_name])
+        db.execute(sql, [player_id, role_type, role_name])
 
 def remove_player(player_id):
     ### remove classes and role
@@ -182,7 +183,7 @@ def suggest_idea(player_id, ideas, contacts, user_id):
         sql = """INSERT INTO player_ideas (player_id, title, value, contact_type, user_id)
                 VALUES (?, ?, ?, ?,?);
                 """
-        db.execute(sql,[player_id, title, value, contact_type, user_id])
+        db.execute(sql, [player_id, title, value, contact_type, user_id])
 
 def find_players(query):
 
@@ -193,4 +194,4 @@ def find_players(query):
         WHERE name LIKE ? or profile like ?
         """
     like = "%" + query + "%"
-    return db.query(sql,[like, like])
+    return db.query(sql, [like, like])

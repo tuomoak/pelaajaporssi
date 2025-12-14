@@ -44,7 +44,7 @@ def add_player():
     require_login()
     classes = players.get_all_classes()
     roles = players.get_all_roles()
-    return render_template("add_player.html", classes=classes, roles = roles)
+    return render_template("add_player.html", classes=classes, roles=roles)
 
 @app.route("/find_player")
 def find_player():
@@ -68,12 +68,19 @@ def create_player():
     profile = request.form["profile"]
     user_id = session["user_id"]
 
+    if len(name) == 0:
+        abort(403)
+
+    if len(name) > 50 or len(profile) > 300:
+        abort(403)
+
     classes = []
     for entry in request.form.getlist("classes"):
         if entry:
             parts = entry.split(":")
             classes.append((parts[0],parts[1]))
 
+            ### checks is input valid
             valid_input("classes", parts[0], parts[1])
 
     roles = []
@@ -84,12 +91,6 @@ def create_player():
 
             ### checks is input valid
             valid_input("roles", parts[0], parts[1])
-
-    if len(name) == 0:
-        abort(403)
-
-    if len(name) > 50 or len(profile) > 300:
-        abort(403)
 
     player_id = players.add_player(name, profile, user_id, classes, roles)
     flash("Uusi pelaaja lisätty.")
@@ -152,7 +153,6 @@ def update_player():
 
     if player[0]['user_id'] != session['user_id']:
         abort(403)
-
 
     classes = []
     for entry in request.form.getlist("classes"):
@@ -221,7 +221,7 @@ def remove_player(player_id):
     require_login()
     player = players.get_player(player_id)
 
-    if not player[0]:
+    if not player:
         abort(404)
 
     if player[0]['user_id'] != session['user_id']:
@@ -279,13 +279,16 @@ def player(player_id):
     if not player:
         abort(404)
 
-    classes = players.get_classes(player_id)
-    all_roles = players.get_all_roles()
-    ideas = players.get_all_ideas()
-    contacts = players.get_all_contacts()
-    player_ideas = players.get_player_ideas(player_id)
+    context = {
+    "player" : player,
+    "classes" : players.get_classes(player_id),
+    "all_roles" : players.get_all_roles(),
+    "ideas" : players.get_all_ideas(),
+    "contacts" : players.get_all_contacts(),
+    "player_ideas" : players.get_player_ideas(player_id)
+    }
 
-    return render_template("/show_player.html", **locals())
+    return render_template("/show_player.html", **context)
 
 @app.route("/user/<int:user_id>")
 def user(user_id):
@@ -296,7 +299,7 @@ def user(user_id):
         abort(404)
     else:
         users_players = users.get_players(user_id)
-        return render_template("/show_user.html", user=user, players = users_players)
+        return render_template("/show_user.html", user=user, players=users_players)
 
 @app.route("/team/<int:page_id>")
 def team(page_id):

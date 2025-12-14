@@ -22,7 +22,7 @@ def get_players(user_id):
         LEFT JOIN player_classes ON player_classes.player_id = players.id
         WHERE user_id = ?
           """
-    return db.query(sql,[user_id])
+    return db.query(sql, [user_id])
 
 def get_player_ideas(user_id, player_id):
 
@@ -30,8 +30,8 @@ def get_player_ideas(user_id, player_id):
         SELECT title, value
         FROM player_ideas
         WHERE user_id = ? AND player_id = ?
-          """
-    return db.query(sql,[user_id, player_id])
+        """
+    return db.query(sql, [user_id, player_id])
 
 def create_user(username, password1):
     password_hash = generate_password_hash(password1)
