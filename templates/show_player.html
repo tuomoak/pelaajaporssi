@@ -4,22 +4,24 @@
 
 {% block content %}
 
-<h2>Pelaaja: {{player[0].name}}</h2>
+<h2 style="display: inline">Pelaaja: {{player[0].name}}</h2> 
+
+<p style="display: inline; margin-left: 20px;">
+  {% if session.user_id == player[0].user_id %}
+  <a href="/edit_player/{{ player[0].id }}">Muokkaa</a> |
+  <a href="/remove_player/{{ player[0].id }}">Poista</a>
+  | Olet lisännyt tunnuksella: <a href="/user/{{ player[0].user_id }}"> {{ player[0].username }} </a>
+{% else %}
+Käyttäjältä: <a href="/user/{{ player[0].user_id }}"> {{ player[0].username }} </a>
+{% endif %}
+</p>
+
 
 {% for message in get_flashed_messages() %}
   <p  class="info">
     <b>{{ message }}</b>
   </p>
 {% endfor %}
-
-<p>
-  Lisännyt: <a href="/user/{{ player[0].user_id }}"> {{ player[0].username }} </a> 
-
-{% if session.user_id == player[0].user_id %}
- | <a href="/edit_player/{{ player[0].id }}"> Muokkaa </a> |
-  <a href="/remove_player/{{ player[0].id }}"> Poista </a>
-{% endif %}
-</p>
 
 <p>
 {% if classes %}
@@ -30,16 +32,18 @@
 </p>
 
 {% for role_type in all_roles %}
+  <p>
   Mahdolliset {{ role_type }}:
-    <ul>
+    <ul class="horizontal-list">
     {% for row in player %}
       {% if row['role_type'] == role_type %}
       <li> {{ row['role_name'] }}</li>
       {% endif %}
-    
     {% endfor %}
     </ul>
+  </p>    
   {% endfor %}
+
 
 <p>Esittely:</p>
 
@@ -47,7 +51,9 @@
 
 <form action="/suggest_idea" method="post">
 
-<p><b>Ehdotus pelaajalle</b></p>
+<hr />
+
+<p><b>Ehdotus pelaajalle:</b>
 
 {% for contact in contacts %}
   
@@ -78,8 +84,9 @@
   <input type="submit" value="Ehdota" />
  
  </form>
+ </p>
 
- <p></p>
+ <p>Ehdotuksia:</p>
 
  {% if player_ideas %}
   

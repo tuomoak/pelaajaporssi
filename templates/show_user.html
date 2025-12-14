@@ -5,7 +5,8 @@
 {% block content %}
 
 {% if session.user_id == user.id %}
-<H2> Sinun käyttäjäsivusi</H2>
+<H2>Sinun käyttäjäsivusi</H2>
+<p><b> Käyttäjänimesi on: {{user.username}} </b></p>
 {% else %}
 <H2> Käyttäjä {{user.username}} </H2> 
 {% endif %}
@@ -16,11 +17,9 @@
   </p>
 {% endfor %}
 
-<H3> Käyttäjänimi: {{user.username}} </H3>
-
 {% if session.user_id == user.id %}
 <p>Olet lisännyt yhteensä {{ players|length}} pelaajaa.</p>
-<b>Lisäämäsi pelaajat:</b>
+<p><b>Lisäämäsi pelaajat:</b></p>
 
 {% else %}
 <p>Käyttäjä lisännyt yhteensä {{ players|length}} pelaajaa.</p>
